@@ -1,0 +1,5 @@
+export const USER_LOADING='USER_LOADING';
+export const USER_GET_DATA='USER_GET_DATA';
+export const USER_END_LOADING='USER_END_LOADING';
+export const USER_FAILURE='USER_FAILURE';
+export const CLEAR_USER='CLEAR_USER';
