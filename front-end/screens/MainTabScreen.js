@@ -105,7 +105,11 @@ const DetailsStackScreen = ({navigation}) => (
     }}>
         <DetailsStack.Screen name="Details" component={DetailsScreen} options={{
         headerLeft: () => (
-            <Icon.Button name="ios-menu" size={25} backgroundColor="#1f65ff" onPress={() => navigation.openDrawer()}></Icon.Button>
+            <Icon.Button name="ios-menu" size={25} backgroundColor="#1f65ff" 
+            onPress={() =>
+               navigation.openDrawer()}>
+                 
+               </Icon.Button>
         )
         }} />
 </DetailsStack.Navigator>

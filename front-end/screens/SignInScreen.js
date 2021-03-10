@@ -12,6 +12,7 @@ import {
     Dimensions,
 
 } from 'react-native';
+import {userGetData}from '../actions/userActions'
 import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from 'expo-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -121,6 +122,10 @@ const SignInScreen= ({navigation})=>{
   
         signIn(foundUser);
     }
+    // const loginUser=(userName,password)=>{
+    //     if ()
+
+    // }
     return (
         <View style={ styles.container} >
             <StatusBar backgroundColor="#05375a" barStyle="Light-content"/>

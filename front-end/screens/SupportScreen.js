@@ -1,75 +1,171 @@
-  
+
 import React from 'react';
-import { View, Text, Button, ListItem,StyleSheet, FlatList } from 'react-native';
-import axios from 'axios';
-import { useDispatch, useSelector } from "react-redux";
-import store from '../store/store';
-import {Provider, connect } from 'react-redux';
-import { userGetAll } from '../actions/userActions';
-import { useState,useEffect,useCallback } from 'react';
-import { State } from 'react-native-gesture-handler';
+import { View, Text, Button, StyleSheet, FlatList } from 'react-native';
+import { useDispatch } from "react-redux";
+import { userGetAll, userDeleteData,userGetData } from '../actions/userActions';
+import { useState, useEffect } from 'react';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const SupportScreen = (props) => {
+const SupportScreen = () => {
+  const dispatch = useDispatch();
+  const [state, setState] = useState({
 
-const dispatch = useDispatch();
-//const [users,setUsers]= useSelector(state => state.state);
-const [state, setState] = useState({
-  
-  data: [],
-});
-// dispatch(userGetAll()).then((res) => {
-//   if (res) {
-//     setState({
-//       data: res.data,
-//     });}
-    const getRecentSheetsCallback = useCallback(() => {
-      console.log("wtf");
-      userGetAll() ;
-    // console.log(store.getState() ); 
+    data: [],
+  });
+  const [datail,SetDetail]=useState({
+    data:[ ]
+    // username:"",
+    // email:"",
+    // password:"",
   })
-  useEffect(() => {
-    // dispatch(userGetAll()).then((res) => {
-    //   if (res) {
-    //     setState({
-    //       data: res.data,
-    //     });}
-    // });
-    setUsers(getRecentSheetsCallback());
-    console.log(users)
-  }, [users]);
-
-
-// useEffect(()=>{
-//   setUsers(getttingData);
-// },[users])
-//const  getusers =()=> dispatch(userGetAll());
-    return (
+  const deleteCurrent = (key) => dispatch(userDeleteData(key));
+  const userGetCurrent = (key) => {
+    dispatch(userGetData(key)).then((res)=> {
+      if (res){
+        SetDetail({username: res.data.email})
+        //console.log( res.data);
+      }
       
-      <View style={styles.container}>
-        <Text>Support Screen</Text>
-        <Button
-          title="Click Here"
-          onPress={() => alert('Button Clicked!')}
-        />
-        <FlatList
-        data= {users}
-        keyExtractor={(item,index)=>
-          item.key.toString()}
-          renderItem={
-            ({item}) =>(           
-              <Text>{item.username}</Text>
-           )           
-          }    
-        />
+    
+  });
+
+ }
+
+  useEffect(() => {
+    dispatch(userGetAll()).then((res) => {
+      if (res) {
+        console.log(res.data)
+        setState({
+          data: res.data,
+        });
+      }
+
+    });
+
+  },
+    [
+    //state.data
+    ]
+   
+  );
+
+
+
+  return (
+
+    <View style={styles.container}>
+      <Text>Support Screen</Text>
+      <Button
+        title="Click Here"
+        onPress={() => alert('Button Clicked!')}
+      />
+      <FlatList
+        data={state.data}
+        keyExtractor={(item, index) => item.id}
+
+        renderItem={
+
+          ({ item }) => (
+            
+            <View style={styles.action}>
+              <View style={styles.item2}>
+                <Text> Email:</Text>
+                <Text>{item.email}:</Text>
+              </View>
+              <View style={styles.item2}>
+
+
+                <Text> Username:</Text>
+                <Text>{item.userName
+                }</Text>
+              </View>
+              <View style={styles.item3}>
+                <TouchableOpacity
+                  onPress={() => {
+                   const res= userGetCurrent(item.id)
+                    console.log("deleted", item.id,res.data)
+                  }
+                  } >
+
+
+                  <FontAwesome
+                    name="angle-right"
+                    color="#05375a"
+                    size={20} />
+
+                </TouchableOpacity>
+              </View>
+              <View style={styles.item3}>
+                <TouchableOpacity
+                  onPress={() => {
+                    deleteCurrent(item.id)
+                    console.log("deleted", item.id)
+                  }
+                  } >
+
+
+                  <FontAwesome
+                    name="trash"
+                    color="#05375a"
+                    size={30} />
+
+                </TouchableOpacity>
+              </View>
+            </View>
+          )
+
+        }
+      />
+      <View>
+        <Text>{datail.username} </Text>
       </View>
-    );
+    </View>
+  );
 };
-export default 
-SupportScreen;
+export default
+  SupportScreen;
 const styles = StyleSheet.create({
   container: {
-    flex: 1, 
-    alignItems: 'center', 
+
+    alignItems: 'center',
     justifyContent: 'center'
+  },
+  signIn: {
+
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 50,
+    flexDirection: 'row',
+
+  }, action: {
+    flexDirection: 'row',
+    marginTop: 20,
+    marginLeft: 10,
+    marginRight: 10,
+
+    borderBottomWidth: 1,
+    borderBottomColor: '#C0C0C0',
+    paddingBottom: 5,
+    height: 50
+  },
+  text_header: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 30
+  },
+  text_footer: {
+    color: '#05375a',
+    fontSize: 18
+  },
+  item1: {
+    width: '15%',
+  },
+  item2: {
+    width: '40%',
+  },
+  item3: {
+    width: '10%',
   },
 });

@@ -10,8 +10,7 @@ import {
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ScrollView } from 'react-native-gesture-handler';
-import { color } from 'react-native-reanimated';
-const RoomScreen = () => {
+const RoomScreen = params => {
   let more = '>';
   let less = '<';
 
@@ -19,6 +18,7 @@ const RoomScreen = () => {
 
   const [adults, setAdults] = React.useState(0);
   const [babies, setBabies] = React.useState(0);
+  const [childrens, setChildrens] = React.useState(0);
 
   return (
 
@@ -51,7 +51,7 @@ const RoomScreen = () => {
 
 
           >
-            <View style={styles.Button}>
+            <View style={styles.buttonCenter}>
               <FontAwesome
                 name="plus"
                 color="#05375a"
@@ -64,7 +64,7 @@ const RoomScreen = () => {
         <TouchableOpacity
           onPress={() => setAdults(adults - 1)}
         >
-          <View style={styles.Button}>
+          <View style={styles.buttonCenter}>
             <FontAwesome
               name="minus"
               color="#05375a"
@@ -75,6 +75,55 @@ const RoomScreen = () => {
         </TouchableOpacity>
       </View>
 
+      <View style={styles.action}>
+
+        <View style={styles.item1}>
+
+          <FontAwesome
+            name="baby"
+            color="#05375a"
+            size={20}
+            marginRight={10}
+          />
+          <FontAwesome
+            name="baby"
+            color="#05375a"
+            size={20}
+            marginRight={10}
+          />
+        </View>
+        <View style={styles.item2}>
+          <Text style={styles.text_footer} > {childrens} children(s )
+             </Text>
+          <Text style={styles.text}>({less}=   12 ans) </Text>
+        </View>
+        <View style={styles.item3}>
+          <TouchableOpacity
+            onPress={() => setChildrens(childrens + 1)}
+          >
+            <View style={styles.buttonCenter}>
+              <FontAwesome
+                name="plus"
+                color="#05375a"
+                size={20}
+                marginRight={10}
+              />
+            </View>
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity
+          onPress={() => setChildrens(childrens - 1)}
+        >
+          <View style={styles.buttonCenter}>
+            <FontAwesome
+              name="minus"
+              color="#05375a"
+              size={20}
+              marginRight={10}
+            />
+          </View>
+        </TouchableOpacity>
+      </View>
       <View style={styles.action2}>
 
         <View style={styles.item1}>
@@ -93,15 +142,15 @@ const RoomScreen = () => {
           />
         </View>
         <View style={styles.item2}>
-          <Text style={styles.text_footer} > {babies} children(s )
-             </Text>
-          <Text style={styles.text}>({less}=   12 ans) </Text>
+          <Text style={styles.text_footer} > {babies} Babies
+     </Text>
+          <Text style={styles.text}>({less}=   3 ans) </Text>
         </View>
         <View style={styles.item3}>
           <TouchableOpacity
             onPress={() => setBabies(babies + 1)}
           >
-            <View style={styles.Button}>
+            <View style={styles.buttonCenter}>
               <FontAwesome
                 name="plus"
                 color="#05375a"
@@ -114,7 +163,7 @@ const RoomScreen = () => {
         <TouchableOpacity
           onPress={() => setBabies(babies - 1)}
         >
-          <View style={styles.Button}>
+          <View style={styles.buttonCenter}>
             <FontAwesome
               name="minus"
               color="#05375a"
@@ -125,13 +174,10 @@ const RoomScreen = () => {
         </TouchableOpacity>
       </View>
 
-
     </View>
-    // </Modal>
   );
 };
 
-// const rooms=()
 
 
 
@@ -140,21 +186,22 @@ const initialList = [
 
 ];
 
-const Rooms = () => {
-  const [count, setCount] = useState(0);
-
+const Rooms = params => {
+  const [count, setCount] = useState(1);
   const [list, setList] = React.useState(initialList);
-
-
-
-
   function handleAdd() {
-  
+    const newValue = count + 1;
+            setCount(newValue);
+           params.SetRoomsValue(newValue);
     setList([...list, { name: '', id: 'ar' }]);
+  
   }
 
   function handleDropItem() {
-    const newList = list.splice(1, list.push() - 1);
+    const newValue = count - 1;
+            setCount(newValue);
+            params.SetRoomsValue(newValue);
+            const newList = list.splice(1, list.push() - 1);
     setList(newList);
 
   }
@@ -196,14 +243,10 @@ const Rooms = () => {
           <RoomScreen />
           {list.map((item) => {
             return <RoomScreen />
-
           })}
-          {/* {/* </View> */}
         </ScrollView>
       </View>
     </View>
-
-
   )
 }
 export default Rooms;
@@ -212,28 +255,29 @@ const styles = StyleSheet.create({
   container: {
     flex: 0,
     padding: 2,
-    borderColor: '#C0C0C0',
+    borderColor: '#05375a',
     borderWidth: 1,
-    borderRadius: 10
-    // borderBottomWidth: 2,
-    // borderBottomColor: 'black',
+    borderRadius: 10,
+    marginBottom: 10,
 
   },
 
   text: {
     color: 'grey',
-    marginTop: 5,
-
-
+    marginTop: 5
   },
   textSign: {
     fontSize: 18,
     fontWeight: 'bold'
   },
   button: {
-    //alignItems: 'flex-end',
     marginTop: '68%',
     paddingLeft: 1,
+    paddingRight: 1,
+  },
+  buttonCenter: {
+  
+    paddingTop: 15,
     paddingRight: 1,
 
 
@@ -291,7 +335,7 @@ const styles = StyleSheet.create({
   },
   action: {
     flexDirection: 'row',
-    marginTop: 10,
+    marginRight: 10,
     marginLeft: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#C0C0C0',
@@ -300,7 +344,7 @@ const styles = StyleSheet.create({
   },
   action2: {
     flexDirection: 'row',
-    marginTop: 10,
+    // marginTop: 10,
     marginLeft: 10,
     // borderBottomWidth: 1,
     // borderBottomColor: '#C0C0C0',

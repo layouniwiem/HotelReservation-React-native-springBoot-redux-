@@ -1,5 +1,9 @@
   
 import React from 'react';
+import { useDispatch } from "react-redux";
+
+import { useState, useEffect } from 'react';
+
 import { 
     View, 
     Text, 
@@ -7,11 +11,11 @@ import {
     TextInput,
     Platform,
     StyleSheet ,
-    StatusBar,
-    Alert,
     Dimensions,
 
 } from 'react-native';
+import { userPostData  } from '../actions/userActions';
+
 import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from 'expo-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -26,7 +30,28 @@ const SignUpScreen= ({navigation})=>{
         confirm_secureTextEntry: true
 
     });
+   const  user ={
+       email: data.email,
+       password:data.password,
+       username:data.email
+   };
+  
+
+   const dispatch = useDispatch();
+
+   // const addUser = (email,username,password) => dispatch(userPostData(email,username,password));
+    const handleaddUser = async (e,name) => {
+        dispatch(userPostData(user)).then((res) => {
+         
+            console.log(res);
+        
+       
+          
     
+        });
+        
+      
+      };
     const handlePasswordChange= (val)=>{
         setData({
             ...data,
@@ -70,6 +95,7 @@ const SignUpScreen= ({navigation})=>{
 
 
     }
+    
     return (
        
         <View style={ styles.container} >
@@ -162,7 +188,15 @@ const SignUpScreen= ({navigation})=>{
                  }
                </TouchableOpacity>
                 </View>
+               
                 <View style={styles.button } >
+                <TouchableOpacity
+              onPress={(user)=>
+                {handleaddUser(user)
+                    handleaddUser(user)
+                    navigation.goBack()}
+            }
+                >
                     <LinearGradient
                     colors={['#002E63','#5D8AA8']}
                     style={styles.signIn}
@@ -172,6 +206,7 @@ const SignUpScreen= ({navigation})=>{
                 }} > Confirm Password </Text>
 
                     </LinearGradient>
+                  </TouchableOpacity>
                    <TouchableOpacity
                      
                         onPress={() => navigation.goBack()}
