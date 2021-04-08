@@ -9,7 +9,9 @@ import HomeScreen from './SearchScreens/HomeScreen';
 import DetailsScreen from './DetailsScreen';
 import ExploreScreen from './ExploreScreen';
 import ProfileScreen from './ProfileScreen';
-
+import SearchResult from './SearchScreens/SearchResult';
+import ResultDetail from './SearchScreens/ResultDetail';
+import SearchRoom from './SearchScreens/SearchRoom/SearchRoom'
 const HomeStack = createStackNavigator();
 const DetailsStack = createStackNavigator();
 
@@ -90,6 +92,46 @@ const HomeStackScreen = ({navigation}) => (
               }></Icon.Button>
         )
         }} />
+        <HomeStack.Screen name="ResultDetail" component={ResultDetail}
+         options={{
+        title:'Result Search ',
+   
+        headerLeft: () => (
+            <Icon.Button name="ios-menu"
+             size={25} 
+             backgroundColor="#002E63"
+              onPress={() => navigation.openDrawer()
+              }></Icon.Button>
+        )
+        }} 
+        />
+        <HomeStack.Screen name="SearchResult" component={SearchResult}
+         options={{
+        title:'Result Search ',
+   
+        headerLeft: () => (
+            <Icon.Button name="ios-menu"
+             size={25} 
+             backgroundColor="#002E63"
+              onPress={() => navigation.openDrawer()
+              }></Icon.Button>
+        )
+        }} 
+        />
+          <HomeStack.Screen name="SearchRoom" component={SearchRoom}
+         options={{
+        title:' SearchRoom ',
+   
+        headerLeft: () => (
+            <Icon.Button name="ios-menu"
+             size={25} 
+             backgroundColor="#002E63"
+              onPress={() => navigation.openDrawer()
+              }></Icon.Button>
+        )
+        }} 
+        />
+       
 </HomeStack.Navigator>
 );
 

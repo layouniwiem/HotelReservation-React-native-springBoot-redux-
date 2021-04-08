@@ -2,7 +2,6 @@
 import React from 'react';
 import { useDispatch } from "react-redux";
 
-import { useState, useEffect } from 'react';
 
 import { 
     View, 
@@ -24,16 +23,22 @@ const SignUpScreen= ({navigation})=>{
     const [data, setData]= React.useState({
         email:'',
         password:'',
+        userName:'',
+        roles:'',
         confirm_password:'',
         check_textInputChange: false ,
         secureTextEntry: true,
-        confirm_secureTextEntry: true
+        confirm_secureTextEntry: true,
+        active:true,
 
     });
    const  user ={
        email: data.email,
        password:data.password,
-       username:data.email
+       userName:data.email,
+       active:true,
+       roles:"USER",
+       active:true,
    };
   
 
@@ -41,13 +46,8 @@ const SignUpScreen= ({navigation})=>{
 
    // const addUser = (email,username,password) => dispatch(userPostData(email,username,password));
     const handleaddUser = async (e,name) => {
-        dispatch(userPostData(user)).then((res) => {
-         
+        dispatch(userPostData(user)).then((res) => {   
             console.log(res);
-        
-       
-          
-    
         });
         
       

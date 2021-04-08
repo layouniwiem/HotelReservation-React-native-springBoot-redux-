@@ -8,72 +8,209 @@ import {
     FlatList,
     TouchableOpacity
 } from 'react-native';
+import { concat } from 'react-native-reanimated';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-const Stars = ({ count }) => {
-  //  const [counter, setCounter] = React.useState(0);
-    var tab=[];
-    for (let i = 0 ; i < count ; i++) {
-           tab.push( <FontAwesome
-            name="map-marker"
-            color="#05375a"
-            size={20}
-            marginRight={10}
-        />)     
-       return tab;
+const initialList = [
 
-    }
+];
+//const [tab,setTab] = React.useState([]);
+const tab1 = [<FontAwesome
+    name="star"
+    color="#05375a"
+    size={20}
+// marginRight={10}
+/>];
+const tab = [];
+
+const Stars = (props) => {
+    const { data } = props
+    //  const [counter, setCounter] = React.useState(0);
+    // const [selectedItem, setSelectedItem] = React.useState();
+    // const [list, setList] = React.useState(initialList);
+    console.log(data);
+
+    //    setTab (...tab,<FontAwesome
+    //     name="star"
+    //     color="#05375a"
+    //     size={20}
+
+    // />)
+    tab.push(<FontAwesome
+        name="star"
+        color="#05375a"
+        size={20}
+
+    />)
+
+
+
+
     return (
+        //console.log("hello from tab ")
         <View>
-           {tab}
+            <Text>
+                {tab}
+
+            </Text>
+
         </View>
-    )
-    
+
+
+
+    );
+
+
+
+
 
 };
 
-const aloo=()=>{
-    return('aloo');
-}
+
 
 const RatingsScreen = params => {
     const [dataSource, setDataSource] = React.useState([
-        { key: 0 }, { key: 1 }, { key: 2 }, { key: 3 }, { key: 4 }, , { key: 5 }
+        {
+            key: 1, data: [<FontAwesome
+                name="star"
+                color="#05375a"
+                size={20}
+
+            />]
+        }, {
+            key: 2, data: [<FontAwesome
+                name="star"
+                color="#05375a"
+                size={20}
+
+            />, <FontAwesome
+                name="star"
+                color="#05375a"
+                size={20}
+
+            />]
+        }, {
+            key: 3, data: [<FontAwesome
+                name="star"
+                color="#05375a"
+                size={20}
+
+            />,
+            <FontAwesome
+                name="star"
+                color="#05375a"
+                size={20}
+
+            />,
+            <FontAwesome
+                name="star"
+                color="#05375a"
+                size={20}
+
+            />]
+        }, {
+            key: 4, data: [<FontAwesome
+                name="star"
+                color="#05375a"
+                size={20}
+
+            />, <FontAwesome
+                name="star"
+                color="#05375a"
+                size={20}
+
+            />, <FontAwesome
+                name="star"
+                color="#05375a"
+                size={20}
+
+            />, <FontAwesome
+                name="star"
+                color="#05375a"
+                size={20}
+
+            />]
+        }
+        , {
+            key: 5, data: [<FontAwesome
+                name="star"
+                color="#05375a"
+                size={20}
+
+            />, <FontAwesome
+                name="star"
+                color="#05375a"
+                size={20}
+
+            />, <FontAwesome
+                name="star"
+                color="#05375a"
+                size={20}
+
+            />, <FontAwesome
+                name="star"
+                color="#05375a"
+                size={20}
+
+            />, <FontAwesome
+                name="star"
+                color="#05375a"
+                size={20}
+
+            />
+            ]
+        }
     ]);
     const [counter, setCounter] = React.useState(0)
 
     const [isshowRatingModal, setIsShowRatingModal] = React.useState(true);
+    const [ratingValue, SetRatingValue] = React.useState("All");
 
     const [selectedItem, setSelectedItem] = React.useState();
     const hideCountriesPicker = () => {
         setShowModal(false);
     };
     const handleSelectedItem = (item) => {
-        params.setSelectedItem(item);
-       // setSelectedItem(item);
-        console.log(item);
+        params.SetRatingValue(item.key);
+        // setSelectedItem(item);
+        console.log(item.key);
         params.setIsShowRatingModal(false);
     }
     const showCountriesPicker = () => {
         setShowModal(true);
     }
+
     return (
         <View style={styles.modalView}>
-            <Text> Hello Ratings </Text>
+            <TouchableOpacity
+                onPress={() => {
+                    params.setIsShowRatingModal(false);
+                    handleSelectedItem("All");
+
+                }}
+            >
+                <Text> All </Text>
+            </TouchableOpacity>
+
+
             <FlatList
                 data={dataSource}
+                keyExtractor={(item) => item.key}
                 renderItem={({ item }) => (
                     <TouchableOpacity
 
                         onPress={() => {
-                            handleSelectedItem(item.key);
-                            setShowModal(false)
+                            handleSelectedItem(item);
+                            // setIsShowRatingModal(false)
 
                         }
 
                         }
                     >
-                        {/* <Stars setCounter={item.key} /> */}
-                        <Text>{item.key}</Text>
+                        <View>
+                            {/* <Stars data={item.key} /> */}
+                            <Text> {item.data} </Text>
+                        </View>
+
                     </TouchableOpacity>)
 
                 }
@@ -86,7 +223,7 @@ export default RatingsScreen;
 
 const styles = StyleSheet.create({
     modalView: {
-        marginTop: '140%',
+        marginTop: '85%',
         backgroundColor: "white",
         borderRadius: 20,
         padding: 35,

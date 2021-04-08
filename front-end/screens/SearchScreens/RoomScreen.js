@@ -5,7 +5,9 @@ import {
   Button,
   StyleSheet,
   TouchableOpacity,
-  Modal
+  Modal,
+  FlatList,
+  Picker
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -14,15 +16,16 @@ const RoomScreen = params => {
   let more = '>';
   let less = '<';
 
-  const [count, setCount] = useState(1);
+  const [count, setCount] = useState(0);
 
-  const [adults, setAdults] = React.useState(0);
+  const [adults, setAdults] = React.useState(1);
   const [babies, setBabies] = React.useState(0);
   const [childrens, setChildrens] = React.useState(0);
+  const [list, setList] = React.useState([]);
 
   return (
 
-    <View style={styles.container}>
+    <View style={styles.containerShadow}>
       <View style={styles.action}>
         <View style={styles.item1}>
 
@@ -62,7 +65,7 @@ const RoomScreen = params => {
           </TouchableOpacity>
         </View>
         <TouchableOpacity
-          onPress={() => setAdults(adults - 1)}
+          onPress={() => { if (adults > 1) { setAdults(adults - 1) } else { setAdults(1) } }}
         >
           <View style={styles.buttonCenter}>
             <FontAwesome
@@ -79,7 +82,8 @@ const RoomScreen = params => {
 
         <View style={styles.item1}>
 
-          <FontAwesome
+         
+        <FontAwesome
             name="baby"
             color="#05375a"
             size={20}
@@ -99,8 +103,13 @@ const RoomScreen = params => {
         </View>
         <View style={styles.item3}>
           <TouchableOpacity
-            onPress={() => setChildrens(childrens + 1)}
+            onPress={() => {
+              setChildrens(childrens + 1);
+              setList([...list, { name: '' }]);
+              
+            }}
           >
+
             <View style={styles.buttonCenter}>
               <FontAwesome
                 name="plus"
@@ -110,9 +119,21 @@ const RoomScreen = params => {
               />
             </View>
           </TouchableOpacity>
+          {list.map((item) => {
+            return <View >
+              <AgeSelectComponent />
+            </View>
+          })}
+          
         </View>
         <TouchableOpacity
-          onPress={() => setChildrens(childrens - 1)}
+          onPress={() => {
+            if (childrens > 0) {
+              setChildrens(childrens - 1)
+              const newList = list.splice(1, list.push() - 1);
+              setList(newList);
+            }
+          }}
         >
           <View style={styles.buttonCenter}>
             <FontAwesome
@@ -161,7 +182,7 @@ const RoomScreen = params => {
           </TouchableOpacity>
         </View>
         <TouchableOpacity
-          onPress={() => setBabies(babies - 1)}
+          onPress={() => { if (babies > 1) { setBabies(babies - 1) } }}
         >
           <View style={styles.buttonCenter}>
             <FontAwesome
@@ -186,22 +207,51 @@ const initialList = [
 
 ];
 
+const AgeSelectComponent = () => {
+  const [selectedValue, setSelectedValue] = useState("");
+  
+
+  return (
+  <View style={styles.containerPicker}>
+        <Picker
+          selectedValue={selectedValue}
+          style={{ height: 40, width: 150 }}
+          onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+        >
+          <Picker.Item label="4 ans" value="4" />
+          <Picker.Item label="5 ans" value="5" />
+          <Picker.Item label="6 ans" value="6" />
+          <Picker.Item label="7 ans" value="7" />
+          <Picker.Item label="8 ans" value="8" />
+          <Picker.Item label="9 ans" value="9" />
+          <Picker.Item label="10 ans" value="10" />
+          <Picker.Item label="11 ans" value="11" />
+          <Picker.Item label="12 ans" value="12" />
+        </Picker>
+      </View>)
+   
+  
+
+
+}
+
+
 const Rooms = params => {
   const [count, setCount] = useState(1);
   const [list, setList] = React.useState(initialList);
   function handleAdd() {
     const newValue = count + 1;
-            setCount(newValue);
-           params.SetRoomsValue(newValue);
+    setCount(newValue);
+    params.SetRoomsValue(newValue);
     setList([...list, { name: '', id: 'ar' }]);
-  
+
   }
 
   function handleDropItem() {
     const newValue = count - 1;
-            setCount(newValue);
-            params.SetRoomsValue(newValue);
-            const newList = list.splice(1, list.push() - 1);
+    setCount(newValue);
+    params.SetRoomsValue(newValue);
+    const newList = list.splice(1, list.push() - 1);
     setList(newList);
 
   }
@@ -261,6 +311,28 @@ const styles = StyleSheet.create({
     marginBottom: 10,
 
   },
+  containerPicker: {
+marginRight:10,
+    alignItems: "center"
+  }, containerShadow: {
+    justifyContent: 'center',
+
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: '#A1CAF1',
+    borderBottomWidth: 0,
+    shadowColor: '#30D5C8',
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 4,
+    marginLeft: 5,
+    marginRight: 5,
+    marginTop: 10,
+    marginBottom: 10,
+    backgroundColor: 'white'
+
+  },
 
   text: {
     color: 'grey',
@@ -276,7 +348,7 @@ const styles = StyleSheet.create({
     paddingRight: 1,
   },
   buttonCenter: {
-  
+
     paddingTop: 15,
     paddingRight: 1,
 
@@ -340,7 +412,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#C0C0C0',
     paddingBottom: 5,
-    height: 50
+    height: 'auto',
   },
   action2: {
     flexDirection: 'row',

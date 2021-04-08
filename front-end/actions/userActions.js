@@ -1,7 +1,9 @@
 import { usersService } from "../services/usersService";
 import * as actions from "../actions/userTypes.js"
+import { authsService } from  "../services/authService";
+import axios from 'axios';
 
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const userGetAll = () => async (dispatch) => {
   try {
@@ -51,14 +53,18 @@ export const userDeleteData = (id) => async (dispatch) => {
 export const userPostData = (user) => async (dispatch) => {
   try {
     dispatch({ type: actions.USER_LOADING });
-    const res = await usersService("/addUser", "post", user);
+    const res = await usersService("/add", "post", user);
     dispatch({ type: actions.USER_GET_DATA, payload: res.data });
+    dispatch({ type: "REGISTER", payload: res.data });
+
     return res;
   } catch (err) {
     dispatch({ type: actions.USER_END_LOADING });
     console.log("hello userError", err)
 
   }
+  
+
 
 }
 
@@ -76,3 +82,41 @@ export const userUpdatedData = (user) => async (dispatch) => {
 
 }
 
+ export const login = (user) => async (dispatch) => {
+    try {
+      dispatch({ type: actions.USER_LOADING });
+      const res = await authsService("authenticate", "post", user);
+      setAuthorizationHeader(res.data.jwt)
+      console.log("res",res.data.jwt)
+      dispatch({ type: actions.LOGIN_SUCCESS, payload: res.data });
+
+      return res;
+    } catch (err) {
+      dispatch({ type: actions.USER_END_LOADING });
+      console.log("hello userError login", err)
+  
+    }
+
+}
+export const  signOut= () =>async (dispatch) => {
+  // setUserToken(null);
+  // setIsLoading(false);
+  try {
+    dispatch({ type: "LOGOUT", payload: null });
+
+    await AsyncStorage.getItem('userToken', (err,token)=>{
+      console.log("hello from signout",token)
+     })
+    await AsyncStorage.removeItem('userToken');
+    // setAuthorizationHeader(null);
+  } catch (e) {
+    console.log(e);
+  }
+
+
+}
+const setAuthorizationHeader = (token) => {
+  const FBIdToken = `Bearer ${token}`
+  AsyncStorage.setItem('userToken', FBIdToken);
+   //axios.defaults.headers.common['Authorization'] = FBIdToken;
+}

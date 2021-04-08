@@ -1,5 +1,6 @@
 import React,{useState} from 'react';
 import {View, StyleSheet} from 'react-native';
+import Cookies from "js-cookie";
 import {
     DrawerContentScrollView,
     DrawerItem
@@ -19,6 +20,8 @@ import SupportScreen from './SupportScreen';
 import BookmarkScreen from './BookmarkScreen';
 import SettingsScreen from './SettingsScreen'
 import {AuthContext} from '../components/context';
+import { signOut  } from '../actions/userActions';
+import { useDispatch } from "react-redux";
 
 // const [isDarkTheme,setIsDarkTheme]=useState(false);
 // const toggletheme= () =>{
@@ -27,13 +30,29 @@ import {AuthContext} from '../components/context';
 // }));}
 
 export function DrawerContent (props){
+    const dispatch = useDispatch();
+
     const [isDarkTheme,setIsDarkTheme]=React.useState(false);
 const toggletheme=()=>{
     setIsDarkTheme(!isDarkTheme);
 }
-const {signOut} = React.useContext(AuthContext);
+// const {signOut} = React.useContext(AuthContext);
 
 //const paperTheme = useTheme();
+const handleLogout = () => {
+   
+    try {
+        dispatch(signOut()).then((res) => {
+             //    await AsyncStorage.setItem('userToken', userToken);
+             
+            //   console.log(res);
+         })
+
+     } catch (e) {
+         console.log(e);
+     }
+    //Cookies.set("token", "");
+  };
     return(
         <View style={{flex:1}}>
             <DrawerContentScrollView {...props}>
@@ -164,7 +183,7 @@ const {signOut} = React.useContext(AuthContext);
                 )}
                 label="Sign Out"
                 onPress={()=>{ 
-                    signOut()
+                    handleLogout()
 
                 }}>
                 </DrawerItem>

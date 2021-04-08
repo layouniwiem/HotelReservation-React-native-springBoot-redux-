@@ -9,20 +9,17 @@ import {
 } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import React, { useState } from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import RoomScreen from './RoomScreen';
 import CountryScreen from './CountryScreen';
-import RatingsScreen from './RatingsScreen'
-
+import RatingsScreen from './RatingsScreen';
 import { LinearGradient } from 'expo-linear-gradient';
 import moment from "moment";
-const SearchtStack = createStackNavigator();
 
 const HomeScreen = ({ route, navigation }) => {
-  const [ratingValue, SetRatingValue] = useState(0);
+  const [ratingValue, SetRatingValue] = useState("All");
   const [isshowRatingModal, setIsShowRatingModal] = React.useState(false);
-  const [roomsValue, SetRoomsValue] = useState(0);
+  const [roomsValue, SetRoomsValue] = useState(1);
   const [date_CheckIN, setDate_DheckIN] = React.useState("");
   const [mindate, setMindate] = React.useState(null);
   const [date_CheckOut, setDate_DheckOut] = React.useState("");
@@ -32,7 +29,10 @@ const HomeScreen = ({ route, navigation }) => {
   const [isCountriesmodalVisible, setCountriesmodalVisible] = useState(false);
   const [isSelectedItem, setSelectedItem] = useState("Turkey");
   const [count, setCount] = useState(0);
+  
   const [isRoomsmodalVisible, setRoomsmodalVisible] = useState(false);
+
+
   const hideDatePicker = () => {
     setDatePickerVisibility(false);
   };
@@ -70,11 +70,14 @@ const HomeScreen = ({ route, navigation }) => {
   };
 
 
+
   const [dataSource, setDataSource] = React.useState([
     { name: 'Tunisie', key: "0" }, { name: 'France', key: "1" }, { name: 'Italie', key: "2" }
   ]);
   const [counrtySelected, setCountySelected] = useState('Tunisie');
   return (
+
+
     <View style={styles.container} >
       <View style={styles.buttonTonight} >
         <View>
@@ -199,7 +202,7 @@ const HomeScreen = ({ route, navigation }) => {
         </View>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={()=>setIsShowRatingModal(true)}
+        onPress={() => setIsShowRatingModal(true)}
       >
         <View style={styles.action}>
 
@@ -217,7 +220,7 @@ const HomeScreen = ({ route, navigation }) => {
       <View style={styles.button} >
         <TouchableOpacity
           style={styles.signIn}
-
+            onPress={()=>navigation.navigate('SearchResult')}
 
         >
           <LinearGradient
@@ -227,7 +230,7 @@ const HomeScreen = ({ route, navigation }) => {
           >
 
             <Text style={styles.signIn, {
-              color: '#fff'
+              color: '#fff',
             }}
             > Search  </Text>
 
@@ -241,7 +244,10 @@ const HomeScreen = ({ route, navigation }) => {
         animationType='slide'
 
       >
-        <CountryScreen setCountySelected={setCountySelected} setCountriesmodalVisible={setCountriesmodalVisible} />
+        <CountryScreen
+          setCountySelected={setCountySelected}
+          setCountriesmodalVisible={setCountriesmodalVisible}
+        />
 
       </Modal>
       <Modal
@@ -250,7 +256,10 @@ const HomeScreen = ({ route, navigation }) => {
         animationType='slide'
 
       >
-        <RatingsScreen setCountySelected={isshowRatingModal} setIsShowRatingModal={setIsShowRatingModal} />
+        <RatingsScreen
+          SetRatingValue={SetRatingValue}
+          setIsShowRatingModal={setIsShowRatingModal}
+        />
 
       </Modal>
       <Modal transparent={true}
@@ -286,6 +295,7 @@ const HomeScreen = ({ route, navigation }) => {
           </View>
         </View>
       </Modal>
+     
     </View>
 
 
@@ -346,7 +356,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: '48%',
     width: '100%',
-    padding:1
+    padding: 1
   },
   buttonTonight: {
     alignItems: 'flex-start',
@@ -360,6 +370,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 50,
     flexDirection: 'row',
+    
 
   },
   placeTonight: {
@@ -450,7 +461,7 @@ const styles = StyleSheet.create({
   textSign: {
     fontSize: 18,
     fontWeight: 'bold'
-  }
+  },
 
 });
 

@@ -6,14 +6,23 @@ import {
   Modal,
   StyleSheet,
   FlatList,
-  TouchableOpacity
+  TouchableOpacity,
+
 } from 'react-native';
+import hotels from '../../model/hotels';
+
+import { InputAutoSuggest } from 'react-native-autocomplete-search';
 
 
 
 const CountryScreen = params => {
   const [dataSource, setDataSource] = React.useState([
-    { name: 'Tunisie', key: "0" }, { name: 'France', key: "1" }, { name: 'Italie', key: "2" }
+    { id: '1', name: 'Paris' },
+    { id: '2', name: 'Pattanduru' },
+    { id: '3', name: 'Para' },
+    { id: '4', name: 'London' },
+    { id: '5', name: 'New York' },
+    { id: '6', name: 'Berlin' }
   ]);
   const [isCountriesmodalVisible, setCountriesmodalVisible] = React.useState(false);
 
@@ -32,9 +41,21 @@ const CountryScreen = params => {
   const showCountriesPicker = () => {
     setShowModal(true);
   }
+
   return (
     <View style={styles.modalView}>
       <Text> Hello countries </Text>
+      <View style={styles.autocompleteContainer}>
+        <InputAutoSuggest
+
+          style={{ flex: 1 }}
+          staticData={
+            dataSource}
+          onDataSelectedChange={data =>
+            console.log(data)
+          }
+        />
+      </View>
       <FlatList
         data={dataSource}
         renderItem={({ item }) => (
@@ -58,8 +79,18 @@ const CountryScreen = params => {
 }
 export default CountryScreen;
 const styles = StyleSheet.create({
+  autocompleteContainer: {
+    flex: 1,
+    left: 0,
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    zIndex: 1
+  },
   modalView: {
-    marginTop: '140%',
+
+
+    marginTop: '50%',
     backgroundColor: "white",
     borderRadius: 20,
     padding: 35,

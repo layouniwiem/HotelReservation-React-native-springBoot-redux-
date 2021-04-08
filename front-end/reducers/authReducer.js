@@ -1,36 +1,50 @@
+// import {
+//   REGISTER_SUCCESS,
+//   REGISTER_FAIL,
+//   LOGIN_SUCCESS,
+//   LOGIN_FAIL,
+//   LOGOUT,
+// } from "../actions/userTypes";
 
+// // const user = JSON.parse(localStorage.getItem("user"));
 
-  const loginReducer = (prevState , action)=>{
-    switch (action.type){
-      case 'LOGIN':
-        return {
-            ...prevState,
-            userName: action.id,
-            userToken: action.token,
-            isLoading: false,
-        };
-        case 'RETREIVE_TOKEN':
-          return {
-            ...prevState,
-            userToken: action.token,
-            isLoading: false,
-          };
-      case 'LOGOUT':
-        return {
-          ...prevState,
-          userName: null,
-          userToken: null,
-          isLoading: false,
-        };
-      case 'REGISTER':
-        return {
-          ...prevState,
-          userName: action.id,
-          userToken: action.token,
-          isLoading: false,
-        };
-   
-    }
-  };
-  export default loginReducer;     
-      
+// const initialState = user
+//   ? { isLoggedIn: true, user }
+//   : { isLoggedIn: false, user: null };
+
+// export default function (state = initialState, action) {
+//   const { type, payload } = action;
+
+//   switch (type) {
+//     case REGISTER_SUCCESS:
+//       return {
+//         ...state,
+//         isLoggedIn: false,
+//       };
+//     case REGISTER_FAIL:
+//       return {
+//         ...state,
+//         isLoggedIn: false,
+//       };
+//     case LOGIN_SUCCESS:
+//       return {
+//         ...state,
+//         isLoggedIn: true,
+//         user: payload.user,
+//       };
+//     case LOGIN_FAIL:
+//       return {
+//         ...state,
+//         isLoggedIn: false,
+//         user: null,
+//       };
+//     case LOGOUT:
+//       return {
+//         ...state,
+//         isLoggedIn: false,
+//         user: null,
+//       };
+//     default:
+//       return state;
+//   }
+// }
