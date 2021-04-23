@@ -39,8 +39,9 @@ const ENTRIES1 = [
 const {width: screenWidth} = Dimensions.get('window');
 
 const MyCarousel = props => {
-  const [entries, setEntries] = useState([]);
-  const {data}= props
+  const [entries, setEntries] = useState();
+  const [data,setData]=useState([]);
+ 
   const carouselRef = useRef(null);
 
   const goForward = () => {
@@ -48,26 +49,35 @@ const MyCarousel = props => {
   };
 
   useEffect(() => {
-    console.log(props)
+    console.log("props",props)
+    setData([...data,props]);
     setEntries(data);
-  }, []);
+    console.log("props",props)
 
-  const renderItem = ({item, index}, parallaxProps) => {
+  }, []);
+  useEffect(() => {
+    console.log("props",props)
+
+    console.log("data from Mycarrousel",data)
+
+  }, [data]);
+   const renderItem = ({item, index}, parallaxProps) => {
+     console.log("renderItem",item)
     return (
       <View style={styles.item}>
         <ParallaxImage
-          source={{uri: item.illustration}}
+          source={{uri: item.data.hotelInfo.hotelPicture}}
           containerStyle={styles.imageContainer}
           style={styles.image}
           parallaxFactor={0.4}
           {...parallaxProps}
         />
-        <Text style={styles.title} numberOfLines={2}>
-          {item.title}
-        </Text>
+        {/* <Text style={styles.title} numberOfLines={2}>
+          {item.data.hotelInfo.hotelName}
+        </Text> */}
       </View>
     );
-  };
+   };
 
   return (
     <View style={styles.container}>

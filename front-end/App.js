@@ -11,7 +11,6 @@ import RootStackScreen from './screens/RootStackScreen';
 import { useEffect,useState } from 'react';
 import { useSelector } from "react-redux";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import userReducer from './reducers/userReducer';
 import store from './store/store';
 import { Provider } from 'react-redux';
 
@@ -36,9 +35,11 @@ const Applic=()=>{
 //   const authToken = state.userToken;  
 //  // console.log("userToken from App.js",user.userToken)
 
-  const [isloggedin,setLogged] = useState(null)
+  const [isloggedin,setLogged] = useState(false)
   const detectLogin= async ()=>{
-     const token = await AsyncStorage.getItem('userToken')
+     const token = await AsyncStorage.getItem('userToken');
+   
+
      console.log(token)
      if(token){
          setLogged(true)
@@ -50,12 +51,13 @@ const Applic=()=>{
     detectLogin()
  },[])
  const state = useSelector(state => state.users)
- console.log("state.userToken    !!!!",state.userToken)
+ console.log("state.userToken ",state.userToken)
 
 return(
   <NavigationContainer>
 
-  {state.userToken !== null ? (  
+  {
+  // (state.userToken !== null ||isloggedin==true ) ? (  
 
    <Drawer.Navigator drawerContent={props =>
      <DrawerContent  {...props} />
@@ -65,9 +67,9 @@ return(
      <Drawer.Screen name="BookmarkScreen" component={BookmarkScreen} />
      <Drawer.Screen name="SettingsScreen" component={SettingsScreen} />
    </Drawer.Navigator>
-   ) 
-    : 
-   <RootStackScreen />  
+  //  ) 
+    // : 
+  //  <RootStackScreen />  
 
    }  
 </NavigationContainer>

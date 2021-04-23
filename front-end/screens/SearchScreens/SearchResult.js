@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
-import hotels from '../../model/hotels'
+import React, { useState, useEffect } from "react";
+// import hotels from '../../model/hotels'
+import { useSelector } from "react-redux";
+
 import {
   View,
   Text,
@@ -10,32 +12,69 @@ import {
   SafeAreaView,
   FlatList,
   StatusBarIOS,
-Image
+  Image
 } from 'react-native';
+import { useDispatch } from 'react-redux'
+import{availableRoomsGetAll} from '../../actions/availableRoomsActions'
 import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ScrollView } from 'react-native-gesture-handler';
 import Autocomplete from 'react-native-autocomplete-input';
 const SearchResult = ({ route, navigation }) => {
-const [money,setMoney]=React.useState("TND")
-const handleStars=(value)=>{
-  var stars=[]
-  console.log(value)
-  for (let i=1 ;i <= value ; i++){
-    stars.push( <FontAwesome
-  name="star"
-  color="#FFBF00"
-  size={20}
+  const dispatch = useDispatch();
 
-/>
-)
+  const hotelstate = useSelector(state => state.hotels.data.hotelResultList.hotelResult);
+  const hotels = useSelector(state => state.hotels.data);
+  useEffect(() => {
+    console.log("state hotels result", hotelstate)
+    console.log("state hotels result")
+  }, [hotelstate]);
+  const [money, setMoney] = React.useState("TND")
   
-  }
-  return stars
+  const handleStars = (value) => {
+    var stars = []
+    let val=handleStartsValue(value);
+    console.log(val)
 
-}
-const [films, setFilms] = useState([]);
+    
+
+    for (let i = 1; i <= val; i++) {
+      stars.push(<FontAwesome
+        name="star"
+        color="#FFBF00"
+        size={20}
+
+      />
+      )
+
+    }
+    return stars
+
+  }
+  const handleStartsValue=(value)=>{
+    switch (value) {
+      case 'ONE_STAR':
+        return 1;// code block
+        
+      case  'TWO_STAR':
+        return 2;// code block
+        
+      case 'THREE_STAR':
+        return 3;// code block
+        
+      case  'FOUR_STAR':
+        return  4;// code block
+        
+      case 'FIVE_STAR':
+        return 5;// code block
+      
+      default:
+        return;
+        
+    }  
+  }
+  const [films, setFilms] = useState([]);
   const [filteredFilms, setFilteredFilms] = useState([]);
   const [selectedValue, setSelectedValue] = useState({});
   const findFilm = (query) => {
@@ -56,50 +95,51 @@ const [films, setFilms] = useState([]);
     //   .then((res) => res.json())
     //   .then((json) => {
     //     const {results: films} = json;
-    const {res}= [];
+    const { res } = [];
     //console.log("hotzl",hotels[0])
 
-    
-        setFilms(hotels);
-        //setting the data in the films state
-      // })
-      // .catch((e) => {
-      //   alert(e);
-      // });
-      // console.log(films)
+
+    setFilms(hotelstate);
+    console.log(films)
+    //setting the data in the films state
+    // })
+    // .catch((e) => {
+    //   alert(e);
+    // });
+    // console.log(films)
   }, []);
   return (
-    
+
     <View  >
       <SafeAreaView>
-      <View  >
-        <View style={styles.action}>
-        <Autocomplete
-          autoCapitalize="none"
-          autoCorrect={false}
-          containerStyle={styles.autocompleteContainer}
-          //data to show in suggestion
-          data={filteredFilms}
-          //default value if you want to set something in input
-          defaultValue={
-            JSON.stringify(selectedValue) === '{}' ? '' : selectedValue.title          }
-          /*onchange of the text changing the state of the query which will trigger
-          the findFilm method to show the suggestions*/
-          onChangeText={(text) => findFilm(text)}
-          placeholder="Enter the hotel name"
-          renderItem={({item}) => (
-            //you can change the view you want to show in suggestion from here
-            <TouchableOpacity
-              onPress={() => {
-                setSelectedValue(item);
-                setFilteredFilms([]);
-              }}>
-              <Text style={styles.itemText}>{item.name}</Text>
-            </TouchableOpacity>
-          )}
-        />
-        </View>
-        {/* <View style={styles.descriptionContainer}>
+        <View  >
+          <View style={styles.action}>
+            <Autocomplete
+              autoCapitalize="none"
+              autoCorrect={false}
+              containerStyle={styles.autocompleteContainer}
+              //data to show in suggestion
+              data={filteredFilms}
+              //default value if you want to set something in input
+              defaultValue={
+                JSON.stringify(selectedValue) === '{}' ? '' : selectedValue.title}
+              /*onchange of the text changing the state of the query which will trigger
+              the findFilm method to show the suggestions*/
+              onChangeText={(text) => findFilm(text)}
+              placeholder="Enter the hotel name"
+              renderItem={({ item }) => (
+                //you can change the view you want to show in suggestion from here
+                <TouchableOpacity
+                  onPress={() => {
+                    setSelectedValue(item);
+                    setFilteredFilms([]);
+                  }}>
+                  <Text style={styles.itemText}>{item.name}</Text>
+                </TouchableOpacity>
+              )}
+            />
+          </View>
+          {/* <View style={styles.descriptionContainer}>
           {films.length > 0 ? (
             <>
               <Text style={styles.infoText}>Selected Data</Text>
@@ -111,55 +151,58 @@ const [films, setFilms] = useState([]);
             <Text style={styles.infoText}>Enter The Film Title</Text>
           )}
         </View> */}
-      </View>
-    </SafeAreaView>
-      <View> 
+        </View>
+      </SafeAreaView>
+      <View style={{margin:2}}>
+
       
-      </View>
-           
-  <FlatList
-                data={hotels}
-                keyExtractor={(item,index) => item.id}
-                renderItem={({ item }) => (
-      <TouchableOpacity
-        onPress={() => navigation.navigate('ResultDetail',{item})}
-      >
-        <View style={styles.container}>
-          {/* <Text>SearchResult</Text> */}
-          <View style={styles.item2}>
+
+      <FlatList
+        data={hotelstate}
+        keyExtractor={(item, index) => item.hotelInfo.hotelCode}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('ResultDetail', { item })
+
+            }}
+          >
+            <View style={styles.container}>
+              {/* <Text>SearchResult</Text> */}
+              <View style={styles.item2}>
 
 
-            <Card >
-              <Card.Content>
-                <Title>{item.name}</Title>
-                <Paragraph>{item.adress}</Paragraph>
-              </Card.Content>
-              <Card.Cover source={{uri:item.coverImages}} />
-               {/* <Card.Cover source={{uri:item.coverImages}} />  */}
-              {/* <Card.Cover source={require(item.coverImages)} /> */}
+                <Card >
+                  <Card.Content>
+                  <Text style={styles.signIn}>{item.hotelInfo.hotelName}</Text>
+                    <Paragraph>{item.hotelInfo.hotelAdress}</Paragraph>
+                  </Card.Content>
+                  <Card.Cover source={{ uri: item.hotelInfo.hotelPicture }} />
+                  {/* <Card.Cover source={{uri:item.coverImages}} />  */}
+                  {/* <Card.Cover source={require(item.coverImages)} /> */}
 
 
-            </Card>
-          </View>
+                </Card>
+              </View>
 
-          <View style={styles.item2}>
-          <View style={styles.action2}>
-<View>
-            <Text> {handleStars(item.Rating)}</Text>
-            </View>
-         
-            </View >
+              <View style={styles.item2}>
+                <View style={styles.action2}>
+                  <View>
+                    <Text> {handleStars(item.hotelInfo.rating)}</Text>
+                  </View>
 
-            <View style={styles.action2}>
-              <FontAwesome
-                name="map-marker"
-                color="#05375a"
-                size={20}
-                marginRight={10}
-              />
-              <Text style={styles.text}> {item.adress} </Text>
-            </View>
-            <View style={styles.action2}>
+                </View >
+
+                <View style={styles.action2}>
+                  <FontAwesome
+                    name="map-marker"
+                    color="#05375a"
+                    size={20}
+                    marginRight={10}
+                  />
+                  <Text style={styles.text}> {item.hotelInfo.hotelAddress} </Text>
+                </View>
+                {/* <View style={styles.action2}>
               <FontAwesome
                 name="stack-exchange"
                 color="#05375a"
@@ -168,29 +211,29 @@ const [films, setFilms] = useState([]);
               />
               <Text style={styles.text}> {item.comments} </Text>
               
+              </View> */}
+                <ScrollView style={styles.scrollView, { height: '10%', margin: 5 }}>
+                  <Text style={styles.textView}>
+                    {item.hotelInfo.hotelDescription}
+                  </Text>
+
+                </ScrollView>
+
+                <View style={styles.button} >
+
+
+
+                  <Text style={styles.signIn}
+                  > {item.minHotelPrice.currency}: {item.minHotelPrice.totalPrice} </Text>
+
+
+                </View>
               </View>
-            <ScrollView style={styles.scrollView, { height: '10%' ,margin:5}}>
-              <Text style={styles.textView}>
-             {item.desc}
-        </Text>
-            
-            </ScrollView>
-           
-             <View style={styles.button} >
-       
-         
 
-            <Text style={styles.signIn}
-            > {money}: {item.prix} </Text>
-
-     
-      </View>
-          </View>
-       
-        </View>
-      </TouchableOpacity>)}
+            </View>
+          </TouchableOpacity>)}
       />
-    
+</View>
     </View>
   );
 };
@@ -204,32 +247,34 @@ const styles = StyleSheet.create({
   //   marginTop: 40,},
   //smallContainer:{flex: 1,},
   container: {
-    //flex: 1,
-    padding: 10,
+    flex: 1,
+    // padding: 10,
     // height: 250,
 
     flexDirection: 'row',
     backgroundColor: 'white',
-    margin: 11,
+    margin: 5,
     // borderColor: '#05375a',
     // borderWidth: 1,
     // borderRadius: 10,
-    marginBottom: 10,
-    marginTop: 10,
-    borderBottomRightRadius:50,
+    //  margin: 10,
+    //  marginBottom: 10,
+
+    // marginTop: 10,
+    //borderBottomRightRadius:50,
     borderBottomWidth: 1,
     borderBottomColor: '#C0C0C0',
-    borderRightWidth   :1,
-borderRightColor: '#C0C0C0',
-shadowColor: "#000",
-shadowOffset: {
-	width: 0,
-	height: 2,
-},
-shadowOpacity: 0.25,
-shadowRadius: 3.84,
+    borderRightWidth: 1,
+    borderRightColor: '#C0C0C0',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
 
-elevation: 5,
+    elevation: 5,
   },
 
 
@@ -254,7 +299,9 @@ elevation: 5,
     fontWeight: 'bold'
   },
   button: {
-    justifyContent: 'center',
+    margin: 5,
+
+    justifyContent: 'flex-start',
     alignItems: 'center',
   },
   buttonCenter: {
@@ -279,24 +326,24 @@ elevation: 5,
     }
   },
   signIn: {
-   
+
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 10,
+   // borderRadius: 10,
     fontWeight: 'bold',
     fontSize: 20,
-    color: '#00CC99',
-  //   shadowColor: "#000",
-  //   shadowOffset: {
-  //     width: 0,
-  //     height: 1,
-  //   },
-  //   shadowOpacity: 0.25,
-  //   shadowRadius: 3.84,
-    
-  //   elevation: 2,
-  // //  flexDirection: 'row',
-  //  // backgroundColor: '#C0C0C0'
+    color: '#002E63',
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 1,
+        height: 1,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+
+      elevation: 0.5,
+     flexDirection: 'row',
+     // backgroundColor: '#C0C0C0'
   },
   plus: {
     width: '100%',
@@ -329,11 +376,11 @@ elevation: 5,
   action: {
     // flex:1,
     flexDirection: 'row',
-    marginRight: 10,
-    marginLeft: 10,
+    // marginRight: 10,
+    // marginLeft: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#C0C0C0',
-   paddingBottom: 40,
+    paddingBottom: 40,
     height: 40
   },
   action2: {
@@ -384,7 +431,7 @@ elevation: 5,
     borderWidth: 0,
   },
   descriptionContainer: {
-   // flex: 1,
+    // flex: 1,
     justifyContent: 'center',
   },
   itemText: {

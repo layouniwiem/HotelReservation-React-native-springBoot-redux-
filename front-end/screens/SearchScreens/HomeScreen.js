@@ -7,19 +7,41 @@ import {
   View,
   Modal
 } from 'react-native';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useState, useEffect } from "react";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import React, { useState } from 'react';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import RoomScreen from './RoomScreen';
+import { useSelector } from "react-redux";
+
 import CountryScreen from './CountryScreen';
 import RatingsScreen from './RatingsScreen';
 import { LinearGradient } from 'expo-linear-gradient';
 import moment from "moment";
-
+import { hotelsGetAll } from '../../actions/hotelsActions';
+import { useDispatch } from 'react-redux'
+import Myloader from '../Myloader';
 const HomeScreen = ({ route, navigation }) => {
-  const [ratingValue, SetRatingValue] = useState("All");
+  const [ratingValue, SetRatingValue] = useState(0);
   const [isshowRatingModal, setIsShowRatingModal] = React.useState(false);
+  const[showLoader,setShowLoader]= React.useState(false);
   const [roomsValue, SetRoomsValue] = useState(1);
+const [rooms, SetRooms] = React.useState({
+  adults: 1,
+  babies: 0,
+  childrens: 0,
+  selectedValue: [],
+
+});
+const getDataFromChild=(val)=>{
+  rooms.adults=val.adults;
+  rooms.babies=val.babies;
+  rooms.childrens=val.childrens;
+  rooms.selectedValue=val.selectedValue;
+  setRooms(...rooms)
+
+}
   const [date_CheckIN, setDate_DheckIN] = React.useState("");
   const [mindate, setMindate] = React.useState(null);
   const [date_CheckOut, setDate_DheckOut] = React.useState("");
@@ -29,10 +51,51 @@ const HomeScreen = ({ route, navigation }) => {
   const [isCountriesmodalVisible, setCountriesmodalVisible] = useState(false);
   const [isSelectedItem, setSelectedItem] = useState("Turkey");
   const [count, setCount] = useState(0);
-  
+  const [nationality, SetNationality] = useState("TN")
   const [isRoomsmodalVisible, setRoomsmodalVisible] = useState(false);
+  const [ageList, setAgeList] = useState([]);
+
+  const dispatch = useDispatch();
+  const state = useSelector(state => state.indexData)
+  const statehotel = useSelector(state => state.hotels)
+
+  const handleSearch = (date_CheckIN, date_CheckOut, roomsValue, ratingValue, nationality,nbAdult,nbChildren,nbInfant,childrenAgeList) => {
+    if (ratingValue=="All")
+      SetRatingValue(0);
+    
+    try {
+      
+      console.log("hello fromhandle search");
+      dispatch(hotelsGetAll({
+        'checkIn': date_CheckIN,
+        'checkOut': date_CheckOut,
+        'codeCityTBO': "130452",
+        "nbRooms":roomsValue,
+        "ratings":ratingValue,
+        "nationality":nationality,
+        "rooms":[ 
+          {
+              "nbAdult": nbAdult,
+              "nbChildren": nbChildren,
+              "nbInfant": nbInfant,
+              "childrenAgeList":childrenAgeList
+          }
+      ]
+      }     
+      )
+
+      ).then((res) => {
+        setShowLoader(false) 
+        console.log("res",res)
+        console.log(rooms)
+        navigation.navigate('SearchResult')
 
 
+      })
+      setShowLoader(true)    } catch (e) {
+      console.log("error",e);
+    }
+  }
   const hideDatePicker = () => {
     setDatePickerVisibility(false);
   };
@@ -41,7 +104,7 @@ const HomeScreen = ({ route, navigation }) => {
   };
   const handleSelectedItem = (item) => {
     setSelectedItem(item.name);
-    console.log(item)
+    console.log("item",item)
   }
   const showCountriesPicker = () => {
     setCountriesmodalVisible(true);
@@ -52,7 +115,11 @@ const HomeScreen = ({ route, navigation }) => {
     setIsRoomModalVisible(true)
   }
   const hideRoomModal = () => {
-    setIsRoomModalVisible(false)
+    // const res =  AsyncStorage.getItem('list');
+   
+    // console.log("hi",res)
+
+    setIsRoomModalVisible(false);
   }
   const handleConfirm = (date) => {
     const newDate = moment(new Date(date)).format("YYYY-MM-DD");
@@ -220,7 +287,17 @@ const HomeScreen = ({ route, navigation }) => {
       <View style={styles.button} >
         <TouchableOpacity
           style={styles.signIn}
-            onPress={()=>navigation.navigate('SearchResult')}
+          onPress={() => {
+            handleSearch (date_CheckIN, 
+              date_CheckOut,
+               roomsValue, 
+               ratingValue,
+               nationality,
+               state.nbAdult,
+               state.nbChildren
+               ,state.nbInfant
+               ,ageList) 
+          }}
 
         >
           <LinearGradient
@@ -262,11 +339,26 @@ const HomeScreen = ({ route, navigation }) => {
         />
 
       </Modal>
+      <Modal
+        transparent={true}
+        visible={showLoader}
+        animationType='slide'
+
+      >
+        <Myloader 
+        
+        />
+
+      </Modal>
       <Modal transparent={true}
         visible={isRoomModalVisible}
         animationType='slide'>
         <View style={styles.modalView2}>
-          <RoomScreen SetRoomsValue={SetRoomsValue} />
+          <RoomScreen 
+           SetRooms={getDataFromChild}
+          SetRoomsValue={SetRoomsValue} 
+         
+          />
 
 
           <View style={styles.Confirm}
@@ -278,6 +370,8 @@ const HomeScreen = ({ route, navigation }) => {
               onPress={() => {
                 setCount(count + 1)
                 hideRoomModal()
+                // let x=  AsyncStorage.getItem('list');
+                // console.log(x);
               }
               }>
               <LinearGradient
@@ -295,7 +389,7 @@ const HomeScreen = ({ route, navigation }) => {
           </View>
         </View>
       </Modal>
-     
+
     </View>
 
 
@@ -370,7 +464,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 50,
     flexDirection: 'row',
-    
+
 
   },
   placeTonight: {

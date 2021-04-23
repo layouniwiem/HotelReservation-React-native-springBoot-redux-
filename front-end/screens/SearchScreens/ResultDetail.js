@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import MyCarousel from './MyCarrossel';
-import hotels from '../../model/hotels'
+// import hotels from '../../model/hotels'
+
 import {
   View,
   Text,
@@ -10,20 +11,57 @@ import {
   TouchableOpacity,
 
 } from 'react-native';
+import{availableRoomsGetAll} from '../../actions/availableRoomsActions'
+
 import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ScrollView } from 'react-native-gesture-handler';
 import MapView from 'react-native-maps';
 import { Marker } from 'react-native-maps';
+import { useDispatch } from 'react-redux'
+import { useSelector } from "react-redux";
+
 const ResultDetail = ({ route, navigation }) => {
+  const dispatch = useDispatch();
+
   const [money, setMoney] = React.useState("TND")
+  const hotels = useSelector(state => state.hotels.data);
 
   const { item } = route.params;
+  const handleSearchRoomAvailability = (resultIndex, sessionId, hotelCode, responseTime) => {
+ 
+    
+    try {
+      
+      console.log("hello handleSearchRoomAvailability ");
+      dispatch(availableRoomsGetAll({
+        'resultIndex': resultIndex,
+        'sessionId': sessionId,
+        'hotelCode': hotelCode,
+        "responseTime":"21",
+       
+      })).then((res) => {
+
+        console.log("res",res)
+        navigation.navigate('SearchRoom')
+        //navigation.navigate('ResultDetail', { res })
+
+      })
+      navigation.navigate('Explore')
+
+    } catch (e) {
+      console.log("error",e);
+    }
+  }
   const handleStars = (value) => {
     var stars = []
-    console.log(value)
-    for (let i = 1; i <= value; i++) {
+    let val=handleStartsValue(value);
+    console.log(val)
+
+    
+
+    for (let i = 1; i <= val; i++) {
       stars.push(<FontAwesome
         name="star"
         color="#FFBF00"
@@ -36,6 +74,28 @@ const ResultDetail = ({ route, navigation }) => {
     return stars
 
   }
+  const handleStartsValue=(value)=>{
+    switch (value) {
+      case 'ONE_STAR':
+        return 1;// code block
+        
+      case  'TWO_STAR':
+        return 2;// code block
+        
+      case 'THREE_STAR':
+        return 3;// code block
+        
+      case  'FOUR_STAR':
+        return  4;// code block
+        
+      case 'FIVE_STAR':
+        return 5;// code block
+      
+      default:
+        return;
+        
+    }  
+  }
   return (
     <View>
     <ScrollView style={styles.scrollView}>
@@ -47,8 +107,8 @@ const ResultDetail = ({ route, navigation }) => {
 
             <Card>
               <Card.Content>
-                <Title style={styles.text_footer}> {item.name} </Title>
-                <Text >{handleStars(item.Rating)}</Text>
+                <Title style={styles.text_footer}> {item.hotelInfo.hotelName} </Title>
+                <Text >{handleStars(item.hotelInfo.rating)}</Text>
 
                 <Paragraph style={styles.text, {
                   color: 'grey'
@@ -58,19 +118,19 @@ const ResultDetail = ({ route, navigation }) => {
                     color="#05375a"
                     size={20}
 
-                  /> {item.adress}</Paragraph>
+                  /> {item.hotelInfo.hotelAddress}</Paragraph>
               </Card.Content>
 
 
             </Card>
           </View>
           <View style={styles.containerShadow}>
-            <MyCarousel data={item.images} />
+            <MyCarousel data={item} />
           </View>
         </View>
-        <View style={styles.containerShadow}>
+        {/* <View style={styles.containerShadow}>
 
-          <View style={styles.action2}>
+          {/* <View style={styles.action2}>
             <FontAwesome
               name="stack-exchange"
               color="#05375a"
@@ -82,13 +142,13 @@ const ResultDetail = ({ route, navigation }) => {
               , fontStyle: "italic"
             }}> {item.comments} </Text>
 
-          </View>
-        </View>
+          </View> 
+        </View> */}
         <View style={styles.containerShadow}>
           <View style={styles.action}>
             <ScrollView style={styles.scrollView}>
               <Text style={styles.textView}>
-                {item.desc}
+                {item.hotelInfo.hotelDescription}
               </Text>
 
             </ScrollView>
@@ -100,14 +160,14 @@ const ResultDetail = ({ route, navigation }) => {
            
             <MapView style={styles.map}
               initialRegion={{
-                latitude: item.region.latitude,
-                longitude: item.region.longitude,
+                latitude: item.hotelInfo.latitude,
+                longitude: item.hotelInfo.longitude,
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421,
                 
               }}
             >              
-            <Marker coordinate={{ latitude :  item.region.latitude , longitude :item.region.longitude }} ></Marker>
+            <Marker coordinate={{ latitude :  item.hotelInfo.latitude , longitude :item.hotelInfo.longitude }} ></Marker>
             </MapView>
         
           </View>
@@ -117,7 +177,7 @@ const ResultDetail = ({ route, navigation }) => {
 
 
           <Text style={styles.sign}
-          > {money}: 250  </Text>
+          > {item.minHotelPrice.currency}: {item.minHotelPrice.totalPrice}  </Text>
 
 
         </View>
@@ -129,7 +189,10 @@ const ResultDetail = ({ route, navigation }) => {
     <View style={styles.button} >
         <TouchableOpacity
           style={styles.signIn}
-            onPress={()=>navigation.navigate('SearchRoom')}
+            onPress={()=>{
+                             handleSearchRoomAvailability(item.resultIndex,hotels.sessionId,item.hotelInfo.hotelCode,"21")
+
+              }}
 
         >
           <LinearGradient
@@ -141,7 +204,7 @@ const ResultDetail = ({ route, navigation }) => {
             <Text style={styles.signIn, {
               color: '#fff',
             }}
-            > Search  </Text>
+            > Show Rooms  </Text>
 
           </LinearGradient>
         </TouchableOpacity>
@@ -268,7 +331,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     fontWeight: 'bold',
     fontSize: 20,
-    color: '#00CC99',
+    color: '#002E63',
     //   shadowColor: "#000",
     //   shadowOffset: {
     //     width: 0,
@@ -313,7 +376,7 @@ const styles = StyleSheet.create({
     fontSize: 30
   },
   text_footer: {
-    color: '#05375a',
+    color: '#002E63',
     fontSize: 18,
     fontStyle: "italic"
   },

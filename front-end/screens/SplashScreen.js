@@ -7,7 +7,8 @@ import {
     Dimensions,
     StyleSheet,
     StatusBar,
-    Image
+    Image,
+    ImageBackground
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -20,13 +21,15 @@ const SplashScreen = ({ navigation }) => {
                 style={styles.header2}
                 animation='fadeInRightBig'
             >
-
+<ImageBackground source={require('../assets/hotelview.jpg')} style={styles.image}>
+  
+    </ImageBackground>
             </Animatable.View>
             <View style={styles.header}>
                 <Animatable.Image
                     animation="bounceIn"
-                    duration={2500}
-                    source={require('../assets/logo.png')}
+                    duration={3500}
+                    source={require('../assets/logo3png.png')}
                     style={styles.logo}
                     resizeMode="stretch"
                 />
@@ -60,12 +63,12 @@ const SplashScreen = ({ navigation }) => {
 export default SplashScreen;
 
 const { height } = Dimensions.get("screen");
-const height_logo = height * 0.28;
+const height_logo = height * 0.9;
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#848482',
+        backgroundColor: '#b2b2b2',
 
     },
     header: {
@@ -92,7 +95,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 30
     },
     logo: {
-        width: height_logo,
+        width: height_logo *0.8,
         height: height_logo
     },
     title: {
@@ -120,4 +123,10 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold'
     }
+    ,
+    image: {
+        flex: 1,
+        resizeMode: "cover",
+        justifyContent: "center"
+      }
 });

@@ -1,11 +1,21 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, Button, StyleSheet, ScrollView,  FlatList,
+ TouchableOpacity } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { RadioButton } from 'react-native-paper';
+import { Avatar, Card, Title, Paragraph } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Checkbox } from 'react-native-paper';
-
+import { useDispatch } from 'react-redux'
+import { useSelector } from "react-redux";
 const SearchRoom = ({ route, navigation }) => {
+    const rooms = useSelector(state => state.availableRooms.data.hotelRooms.hotelRoom);
+    React.useEffect(() => {
+        console.log("state rooms", rooms)
+        console.log("state rooms")
+      }, [rooms]);
+      const hotels = useSelector(state => state.hotels.data);
+      const index = useSelector(state => state.indexData);
+
     const [checkedBox, setCheckedBox] = React.useState(false);
     const [checkedBoxCancel, setCheckedBoxCancel] = React.useState(false);
     const [checkedBoxRed, setCheckedBoxRed] = React.useState(false);
@@ -18,106 +28,128 @@ const SearchRoom = ({ route, navigation }) => {
     const [checked2, setChecked2] = React.useState('first');
     const [checked3, setChecked3] = React.useState('first');
     const [data, setData] = React.useState(2);
+const handleTitleRoom=(roomName)=>{
+    var array = roomName.split(",");
+    return array
+    console.log(array)
 
+}
     return (
         <View style={styles.container}>
 
-            <ScrollView style={styles.scrollView}>
-                <View style={styles.containerShadow}>
+<ScrollView style={styles.scrollView}>
+
+            <View style={styles.containerShadow}>
 
                 <View style={styles.buttonCenter}>
-                        <TouchableOpacity>
-                    
-                                <FontAwesome
-                                    name="pencil"
-                                    color="#A1CAF1"
-                                    size={20}
-                                />
-                              
-                            
-                        </TouchableOpacity>
-                    </View>
+                    <TouchableOpacity>
 
-                    <Text style={styles.text}
-                    >  You search for {data} : adults ,{data}: adults ,{data}: nights</Text>
-                    <View style={styles.action2}>
-                        <View style={styles.item3}>
-                            <Text style={styles.textView}> Check-In-Date</Text>
-                        </View>
-                        <View style={styles.item2}>
-                            <Text  style={styles.textView}> Check-Out-Date</Text>
-                        </View>
-                    </View>
-                   
-                  
+                        <FontAwesome
+                            name="pencil"
+                            color="#002E63"
+                            size={20}
+                        />
+
+
+                    </TouchableOpacity>
                 </View>
-                <View style={styles.containerShadow}>
 
-<View style={styles.buttonCenter}>
-        
-    </View>
+                <Text style={styles.text}
+                >  You search for {hotels.noOfRoomsRequested} : rooms ,{index.nbAdult}: adults ,{index.nbChildren+index.nbInfant}: childrens</Text>
+                <View style={styles.action2}>
+                    <View style={styles.item3}>
+                        <Text style={styles.textView}> Check-In-Date</Text>
+                        <Text style={styles.textView}> {hotels.checkInDate}</Text>
 
-    <Text style={styles.text,{fontWeight:'bold'}}
-    >  Set your filters </Text>
-    <View style={styles.action3}>
-      
-        <Checkbox
-      status={checkedBox ? 'checked' : 'unchecked'}
-      onPress={() => {
-        setCheckedBox(!checkedBox);
-      }}
-    />
-    <Text style={styles.textfilter}
-    >  no concellation needed </Text>
-    </View>
-    <View style={styles.action3}>
-      
-        <Checkbox
-      status={checkedBoxRed ? 'checked' : 'unchecked'}
-      onPress={() => {
-        setCheckedBoxRed(!checkedBoxRed);
-      }}
-    />
-    <Text style={styles.textfilter}
-    >  non redufunable </Text>
-    </View>
-    <View style={styles.action3}>
-      
-        <Checkbox
-      status={checkedBoxBreakfast ? 'checked' : 'unchecked'}
-      onPress={() => {
-        setCheckedBoxBreakfast(!checkedBoxBreakfast);
-      }}
-    />
-    <Text style={styles.textfilter}
-    >  Breakfast included </Text>
-    </View>
-   
-  
-</View>
+                    </View>
+                    <View style={styles.item2}>
+                        <Text style={styles.textView}> Check-Out-Date</Text>
+                        <Text style={styles.textView}> {hotels.checkInDate}</Text>
+
+                    </View>
+                </View>
+
+
+            </View>
+            <View style={styles.containerShadow}>
+
+                <View style={styles.buttonCenter}>
+
+                </View>
+
+                <Text style={styles.text, { fontWeight: 'bold' }}
+                >  Set your filters </Text>
+                <View style={styles.action3}>
+
+                    <Checkbox
+                        status={checkedBox ? 'checked' : 'unchecked'}
+                        onPress={() => {
+                            setCheckedBox(!checkedBox);
+                        }}
+                    />
+                    <Text style={styles.textfilter}
+                    >  no concellation needed </Text>
+                </View>
+                <View style={styles.action3}>
+
+                    <Checkbox
+                        status={checkedBoxRed ? 'checked' : 'unchecked'}
+                        onPress={() => {
+                            setCheckedBoxRed(!checkedBoxRed);
+                        }}
+                    />
+                    <Text style={styles.textfilter}
+                    >  non redufunable </Text>
+                </View>
+                <View style={styles.action3}>
+
+                    <Checkbox
+                        status={checkedBoxBreakfast ? 'checked' : 'unchecked'}
+                        onPress={() => {
+                            setCheckedBoxBreakfast(!checkedBoxBreakfast);
+                        }}
+                    />
+                    <Text style={styles.textfilter}
+                    >  Breakfast included </Text>
+                </View>
+
+
+            </View>
+ <FlatList
+        data={rooms}
+        keyExtractor={(item, index) => item.roomIndex}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            onPress={() => {
+            //   navigation.navigate('ResultDetail', { item })
+
+            }}
+          >
                 <View style={styles.containerShadow}>
 
 
 
                     <Text style={styles.text_footer}
-                    >  Double or Twin Room </Text>
-                    <Text style={styles.text}
-                    >  choose your bed </Text>
+                    >  {item.roomTypeName} </Text>
+                    {/* <Text style={styles.text}
+                    >  choose your bed </Text> */}
                     <View style={styles.action}>
-                        <RadioButton
+                         {/* <RadioButton
                             value="first"
                             status={checked2 === 'first' ? 'checked' : 'unchecked'}
                             onPress={() => setChecked2('first')}
-                        /><Text style={styles.text}
-                        >  <FontAwesome
+                    > */}
+                         <Text style={styles.text} 
+                      >   
+                        <FontAwesome
                                 name="bed"
                                 color="#05375a"
                                 size={30}
 
-                            /> Double Bed</Text>
+                            /> {handleTitleRoom (item.roomTypeName)}</Text>
 
                     </View>
-                    <View style={styles.action}>
+                    {/* <View style={styles.action}>
                         <RadioButton
                             value="second"
                             status={checked2 === 'second' ? 'checked' : 'unchecked'}
@@ -135,16 +167,31 @@ const SearchRoom = ({ route, navigation }) => {
                                 size={15}
 
                             /> 2 single beds</Text>
-                    </View>
+                    </View> */}
                     <Text style={styles.sign}
                     >  120 dt </Text>
+                   {/* (item.roomAdditionalInfo): */}
+                   <Card >
+                  <Card.Content>
+                  <Text style={styles.signIn}>{}</Text>
+                    {/* <Paragraph>{item.hotelInfo.hotelAdress}</Paragraph> */}
+                  </Card.Content>
+                  <Card.Cover source={{ uri: item.roomAdditionalInfo.imageURLs.url[0]}} />
+                  {/* <Card.Cover source={{uri:item.coverImages}} />  */}
+                  {/* <Card.Cover source={require(item.coverImages)} /> */}
+
+
+                </Card>
+                    <Paragraph> 
+                        {item.amenities}
+                    </Paragraph>
                     <View style={styles.button}>
                         <TouchableOpacity>
                             <LinearGradient
-                                colors={['#A1CAF1', '#30D5C8']}
+                                colors={['#002E63', '#5D8AA8']}
                                 style={styles.signIn}
                             >
-                                <Text style={styles.text_header}> 120 {money} </Text>
+                                <Text style={styles.text_header}> 120 {item.roomRate.currency} </Text>
                                 <FontAwesome
                                     name="tag"
                                     color="#fff"
@@ -155,7 +202,7 @@ const SearchRoom = ({ route, navigation }) => {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={styles.containerShadow}>
+                {/* <View style={styles.containerShadow}>
 
 
 
@@ -274,9 +321,11 @@ const SearchRoom = ({ route, navigation }) => {
                                 />
                                 <Text>  </Text>
                             </LinearGradient>
-                        </TouchableOpacity>
-                    </View>
-                </View>
+                        </TouchableOpacity> */}
+                {/* / </View>
+                </View> */}
+                  </TouchableOpacity>)}
+      />
             </ScrollView>
         </View>
     );
@@ -364,7 +413,7 @@ const styles = StyleSheet.create({
     },
     textfilter: {
         color: 'grey',
-       
+
         marginTop: 10
     },
 
@@ -377,12 +426,16 @@ const styles = StyleSheet.create({
         padding: 3,
     },
     buttonCenter: {
-        // justifyContent: 'flex-end',
+        ...StyleSheet.absoluteFillObject,
+   // top: 10,
+    left: 320,
+        justifyContent: 'flex-start',
         alignItems: 'flex-end',
-// margin:2,
-        padding: 2,
+        margin:2,
+       // padding: 2,
         // paddingLeft: 180,
-
+        //backgroundColor: "grey",
+        //width: 20,
 
     },
 
@@ -406,7 +459,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         fontWeight: 'bold',
         fontSize: 20,
-        color: '#00CC99',
+        color: '#002E63',
 
     }, signIn: {
         width: '100%',
@@ -441,12 +494,12 @@ const styles = StyleSheet.create({
         fontSize: 15
     },
     text_footer: {
-        color: '#A1CAF1',
+        color: '#002E63',
         fontSize: 18,
 
         fontStyle: "italic",
         borderBottomWidth: 1,
-        borderBottomColor: '#A1CAF1',
+        borderBottomColor: '#05375a',
         margin: 10,
         padding: 5
     },
@@ -491,11 +544,11 @@ const styles = StyleSheet.create({
         width: '15%',
     },
     item2: {
-        margin:5,
+        margin: 5,
         paddingLeft: 10,
         width: '50%',
         borderLeftWidth: 1,
-        borderLeftColor: '#30D5C8',
+        borderLeftColor: '#002E63',
     },
     item3: {
         width: '50%',
