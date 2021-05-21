@@ -27,24 +27,35 @@ const HomeScreen = ({ route, navigation }) => {
   const [isshowRatingModal, setIsShowRatingModal] = React.useState(false);
   const[showLoader,setShowLoader]= React.useState(false);
   const [roomsValue, SetRoomsValue] = useState(1);
-const [rooms, SetRooms] = React.useState({
+  const [rooms, SetRooms] = React.useState([])
+
+const [room, SetRoom] = React.useState({
   adults: 1,
   babies: 0,
   childrens: 0,
   selectedValue: [],
 
 });
-const getDataFromChild=(val)=>{
-  rooms.adults=val.adults;
-  rooms.babies=val.babies;
-  rooms.childrens=val.childrens;
-  rooms.selectedValue=val.selectedValue;
-  setRooms(...rooms)
+const setTheRooms=(val,dest)=>{
+  for (i=0;i<dest.length;i++)
+{ setOneRoom(val)}
+  setRooms([...rooms,room])
 
 }
-  const [date_CheckIN, setDate_DheckIN] = React.useState("");
+
+const setOneRoom=(val)=>{
+  room.adults=val.adults;
+  room.babies=val.babies;
+  room.childrens=val.childrens;
+  room.selectedValue=val.selectedValue;
+  setRoom(...rooms)
+
+}
+
+date= moment(new Date()).format("YYYY-MM-DD");
+  const [date_CheckIN, setDate_DheckIN] = React.useState( moment(new Date()).format("YYYY-MM-DD"));
   const [mindate, setMindate] = React.useState(null);
-  const [date_CheckOut, setDate_DheckOut] = React.useState("");
+  const [date_CheckOut, setDate_DheckOut] = React.useState(moment(new Date()).add(1, 'days').format("YYYY-MM-DD"));
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isDatePickerVisible2, setDatePickerVisibility2] = useState(false);
   const [isRoomModalVisible, setIsRoomModalVisible] = useState(false);
@@ -58,6 +69,7 @@ const getDataFromChild=(val)=>{
   const dispatch = useDispatch();
   const state = useSelector(state => state.indexData)
   const statehotel = useSelector(state => state.hotels)
+  const stateCities = useSelector(state => state.cities)
 
   const handleSearch = (date_CheckIN, date_CheckOut, roomsValue, ratingValue, nationality,nbAdult,nbChildren,nbInfant,childrenAgeList) => {
     if (ratingValue=="All")
@@ -65,7 +77,8 @@ const getDataFromChild=(val)=>{
     
     try {
       
-      console.log("hello fromhandle search");
+      console.log("hello fromhandle search",date_CheckIN, date_CheckOut, roomsValue, ratingValue, nationality,nbAdult,nbChildren,nbInfant,childrenAgeList );
+      
       dispatch(hotelsGetAll({
         'checkIn': date_CheckIN,
         'checkOut': date_CheckOut,
@@ -73,6 +86,7 @@ const getDataFromChild=(val)=>{
         "nbRooms":roomsValue,
         "ratings":ratingValue,
         "nationality":nationality,
+      
         "rooms":[ 
           {
               "nbAdult": nbAdult,
@@ -150,7 +164,17 @@ const getDataFromChild=(val)=>{
         <View>
           <TouchableOpacity
             style={styles.placeTonight}
-
+            onPress={() => {
+              handleSearch (date_CheckIN, 
+                date_CheckOut,
+                 roomsValue, 
+                 ratingValue,
+                 nationality,
+                 state.nbAdult,
+                 state.nbChildren
+                 ,state.nbInfant
+                 ,ageList) 
+            }}
           >
 
             <LinearGradient
@@ -214,6 +238,7 @@ const getDataFromChild=(val)=>{
               onConfirm={handleConfirm}
               onCancel={hideDatePicker}
               minimumDate={new Date()}
+              // date={new Date()}
             />
             <FontAwesome
               name="calendar"
@@ -235,6 +260,8 @@ const getDataFromChild=(val)=>{
             <DateTimePickerModal
               isVisible={isDatePickerVisible2}
               value={date_CheckOut}
+              mode="date"
+
               onConfirm={handleConfirm2}
               onCancel={hideDatePicker}
               minimumDate={mindate}
@@ -355,8 +382,9 @@ const getDataFromChild=(val)=>{
         animationType='slide'>
         <View style={styles.modalView2}>
           <RoomScreen 
-           SetRooms={getDataFromChild}
+          //  SetRooms={getDataFromChild}
           SetRoomsValue={SetRoomsValue} 
+          
          
           />
 
@@ -448,7 +476,9 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: 'center',
-    marginTop: '48%',
+   // marginTop: '48%',
+   position: 'absolute',
+   bottom: 0,
     width: '100%',
     padding: 1
   },

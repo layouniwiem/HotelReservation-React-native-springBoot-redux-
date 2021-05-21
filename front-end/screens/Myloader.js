@@ -40,10 +40,10 @@ const Myloader = ({ route, navigation }) => {
         /> */}
          <AnimatedLoader
         visible={true}
-        overlayColor="rgba(255,255,255,0.75)"
-        source={require("../assets/loader.json")}
+        overlayColor="rgba(255,255,255,0.5)"
+        source={require("../assets/loader2.json")}
         animationStyle={styles.lottie}
-        speed={1}
+        speed={0.5}
       />
       </View>
     
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   lottie: {
-    width: 300,
-    height: 300
+    width: 100,
+    height: 100
   }
 });

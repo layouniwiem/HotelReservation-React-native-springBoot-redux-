@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import MyCarousel from './MyCarrossel';
+import MyCarousel from '../MyCarrossel';
 // import hotels from '../../model/hotels'
 
 import {
@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
 
 } from 'react-native';
-import{availableRoomsGetAll} from '../../actions/availableRoomsActions'
+import{availableRoomsGetAll} from '../../../actions/availableRoomsActions'
 
 import { Avatar, Button, Card, Title, Paragraph, Modal } from 'react-native-paper';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -21,9 +21,10 @@ import MapView from 'react-native-maps';
 import { Marker } from 'react-native-maps';
 import { useDispatch } from 'react-redux'
 import { useSelector } from "react-redux";
-import Myloader from '../Myloader';
+import Myloader from '../../Myloader';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const ResultDetail = ({ route, navigation }) => {
+const RoomDetail = ({ route, navigation }) => {
   const dispatch = useDispatch();
 
   const [money, setMoney] = React.useState("TND")
@@ -31,6 +32,23 @@ const ResultDetail = ({ route, navigation }) => {
   const[showLoader,setShowLoader]= React.useState(false);
 
   const { item } = route.params;
+  const handleInclusion = (inclusion) => {
+    let info=[]; 
+    var array = inclusion.split(", ");
+    for (let i=0;i<array.length;i++){
+       
+        info.push(<Text style={styles.text}
+            > <FontAwesome
+                    name="plus"
+                    color="#FFBF00"
+                    size={20}
+
+                /> {array[i]}{"\n"} </Text> )  
+               
+        }
+        return info;
+    }
+
   const handleSearchRoomAvailability = (resultIndex, sessionId, hotelCode, responseTime) => {
  
     
@@ -57,6 +75,93 @@ const ResultDetail = ({ route, navigation }) => {
       console.log("error",e);
     }
   }
+  const handleTitleRoom = (roomName) => {
+    let info=""; let smoke=""
+    let beds=""; let vue="";
+    var array = roomName.split(",");
+    //  return array
+    // console.log(array)
+    // for (i=0;i<array.length;i++){
+    //     switch (array[i]){
+    //         case 'non Smoking':
+    //             smoke= array[i]; break;
+    //             case '':
+    //             info= array[i]; break;
+    //             case '':
+    //             info= array[i]; break;
+    //             case '':
+    //             info= array[i]; break;
+    //     }
+    // }
+   
+    return ( (array.length>1)?(
+        <Text>
+            <Text style={styles.text}
+            > <FontAwesome
+                    name="info-circle"
+                    color="#FFBF00"
+                    size={20}
+
+                /> {array[0]} </Text>
+                {"\n"}
+<Text style={styles.text}
+            ><FontAwesome
+                    name="bed"
+                    color="#FFBF00"
+                    size={20}
+
+                />{array[1]} </Text>
+                {"\n"}
+            <Text style={styles.text}
+            >
+               {(array[2]=="Smoking"|| array[2]=="smoking")? (
+                   
+               <MaterialCommunityIcons name="smoking" color="#FFBF00" size={20} />
+               ):((array[2]=="nonSmoking"|| array[2]=="nonsmoking"|| array[2]=="Nonsmoking" || array[2]=="non smoking"|| array[2]=="Non smoking"|| array[2]=="non Smoking"))?
+                  <MaterialCommunityIcons name="smoking-off" color="#FFBF00" size={20} /> 
+               :(
+                <MaterialCommunityIcons 
+                name="information-outline" 
+                color="#FFBF00" size={20} 
+                /> 
+
+               )}{array[2]} </Text>{"\n"}
+
+
+            {(array[3] != null) ? 
+            (<Text style={styles.text}
+            ><FontAwesome
+                    name="eye"
+                    color="#FFBF00"
+                    size={20}
+
+                /> {array[3]} </Text> ) : (
+                <Text style={styles.text}
+                ><FontAwesome
+                        name="eye"
+                        color="#FFBF00"
+                        size={20}
+
+                    /> Standart vue </Text>)}
+        </Text>
+
+    ):(
+     
+        
+                                   
+           
+            <Paragraph style={styles.text}>
+            <FontAwesome
+                name="info-circle"
+                color="#FFBF00"
+                size={20}
+
+            />
+            {array[0]}  
+            </Paragraph>
+           
+    ))
+}
   const handleStars = (value) => {
     var stars = []
     let val=handleStartsValue(value);
@@ -101,7 +206,7 @@ const ResultDetail = ({ route, navigation }) => {
   }
   return (
     <View>
-    <ScrollView style={styles.scrollView}>
+    <ScrollView >
       {/* <View style={styles.containerShadow}> */}
 
         <View  >
@@ -110,10 +215,10 @@ const ResultDetail = ({ route, navigation }) => {
 
             <Card>
               <Card.Content>
-                <Title style={styles.text_footer}> {item.hotelInfo.hotelName} </Title>
-                <Text >{handleStars(item.hotelInfo.rating)}</Text>
+                <Title style={styles.text_footer}> {item.roomTypeName} </Title>
+                {/* <Text >{handleStars(item.hotelInfo.rating)}</Text> */}
 
-                <Paragraph style={styles.text, {
+                {/* <Paragraph style={styles.text, {
                   color: 'grey'
                   , fontStyle: "italic"
                 }}><FontAwesome
@@ -121,26 +226,71 @@ const ResultDetail = ({ route, navigation }) => {
                     color="#05375a"
                     size={20}
 
-                  /> {item.hotelInfo.hotelAddress}</Paragraph>
+                  /> {item.hotelInfo.hotelAddress}</Paragraph> */}
               </Card.Content>
 
 
             </Card>
           </View>
           <View style={styles.containerShadow}>
-            {/* <MyCarousel data={item.hotelInfo.hotelPicture} /> */}
-            <Card >
-                  {/* <Card.Content>
-                  <Text style={styles.signIn}>{item.hotelInfo.hotelName}</Text>
-                    <Paragraph>{item.hotelInfo.hotelAdress}</Paragraph>
-                  </Card.Content> */}
-                  <Card.Cover source={{ uri: item.hotelInfo.hotelPicture }} />
-                  {/* <Card.Cover source={{uri:item.coverImages}} />  */}
-                  {/* <Card.Cover source={require(item.coverImages)} /> */}
+         { (item.roomAdditionalInfo !== null  ) ? (
 
-
-                </Card>
+             <MyCarousel data={item.roomAdditionalInfo.imageURLs.url} />) :  (    
+                       <Title style={styles.text_footer}> no Pictures </Title>
+)
+             }
+           
           </View>
+          <View style={styles.containerShadow}>
+          <View style={styles.action}>
+          <View style={styles.action2}>
+                                <View style={styles.item2}>
+
+                                    {/* <RadioButton
+                            value="first"
+                            status={checked2 === 'first' ? 'checked' : 'unchecked'}
+                            onPress={() => setChecked2('first')}
+                    > */}
+                                    <Text style={styles.text}
+                                    >
+
+                                        {handleTitleRoom(item.roomTypeName)}
+                                        {"\n"}
+                                    </Text>
+
+                                </View>
+                                <View style={styles.item2}>
+
+                                
+                                {(item.inclusion=="Free WiFi ")?(
+                                    
+                                    
+                                    <Text style={styles.text}
+                > <FontAwesome
+                        name="wifi"
+                        color="#FFBF00"
+                        size={20}
+
+                    /> {item.inclusion} </Text>  ):(
+
+                        handleInclusion(item.inclusion)
+
+                           
+                    )}                           
+                                   </View>
+                                   </View>
+</View>
+
+</View>
+
+          <View style={styles.containerShadowfinal}>
+          <View style={styles.action}>
+<Paragraph style={styles.text}>
+    {item.amenities}
+</Paragraph>
+</View>
+
+</View>
         </View>
         {/* <View style={styles.containerShadow}>
 
@@ -158,7 +308,7 @@ const ResultDetail = ({ route, navigation }) => {
 
           </View> 
         </View> */}
-        <View style={styles.containerShadow}>
+        {/* <View style={styles.containerShadow}>
           <View style={styles.action}>
             <ScrollView style={styles.scrollView}>
               <Text style={styles.textView}>
@@ -186,7 +336,7 @@ const ResultDetail = ({ route, navigation }) => {
         
           </View>
         </View>
-        <View style={styles.containerShadowfinal}>
+        <View style={styles.containerShadow}>
 
 
 
@@ -194,7 +344,7 @@ const ResultDetail = ({ route, navigation }) => {
           > {item.minHotelPrice.currency}: {item.minHotelPrice.totalPrice}  </Text>
 
 
-        </View>
+        </View> */}
 
 
       {/* </View> */}
@@ -204,8 +354,7 @@ const ResultDetail = ({ route, navigation }) => {
         <TouchableOpacity
           style={styles.signIn}
             onPress={()=>{
-          handleSearchRoomAvailability(item.resultIndex,hotels.sessionId,item.hotelInfo.hotelCode,"21")
-
+navigation.navigate('BookScreen');
               }}
 
         >
@@ -218,7 +367,7 @@ const ResultDetail = ({ route, navigation }) => {
             <Text style={styles.signIn, {
               color: '#fff',
             }}
-            > Show Rooms  </Text>
+            > Book Now </Text>
 
           </LinearGradient>
         </TouchableOpacity>
@@ -238,7 +387,7 @@ const ResultDetail = ({ route, navigation }) => {
   );
 };
 
-export default ResultDetail;
+export default RoomDetail;
 
 const styles = StyleSheet.create({
   container: {
@@ -268,7 +417,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 2,
     borderColor: '#A1CAF1',
-    borderBottomWidth: 1,
+    //borderBottomWidth: 0,
     shadowColor: '#30D5C8',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
@@ -278,7 +427,7 @@ const styles = StyleSheet.create({
     marginRight: 5,
     marginTop: 10,
     marginBottom: 10,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
 
   },
   containerShadowfinal: {
@@ -287,7 +436,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 2,
     borderColor: '#A1CAF1',
-    borderBottomWidth: 1,
+    //borderBottomWidth: 0,
     shadowColor: '#30D5C8',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
@@ -296,8 +445,8 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     marginRight: 5,
     marginTop: 10,
-    marginBottom: 50,
-    backgroundColor: 'white'
+    marginBottom: 20,
+    backgroundColor: 'white',
 
   },
   containerShadowAll: {
@@ -314,7 +463,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     marginRight: 5,
     marginTop: 10,
-    marginBottom: 10,
+    marginBottom: 50,
 
   },
 
@@ -342,12 +491,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   button: {
+
     alignItems: 'center',
     // marginTop: '48%',
     position: 'absolute',
     bottom: 0,
-    right:0,
-    padding:1
+     width: '100%',
+     padding: 1
+  
   },
   buttonCenter: {
 
@@ -396,6 +547,9 @@ const styles = StyleSheet.create({
   alignItems: 'center',
   borderRadius: 5,
   flexDirection: 'row',
+  // position: 'absolute',
+  // position: 'relative'
+
   },
   plus: {
     width: '100%',
@@ -428,16 +582,13 @@ const styles = StyleSheet.create({
   },
   action: {
     flexDirection: 'row',
-    marginTop: 5,
-    marginRight: 10,
-
-    marginLeft: 10,
+   margin:10,
     // borderTopWidth: 1,
     // borderTopColor: '#C0C0C0',
     // borderBottomWidth: 1,
     // borderBottomColor: '#C0C0C0',
     //paddingBottom: 5,
-    height: 100,
+    height: 110,
   },
   action2: {
     flexDirection: 'row',
@@ -490,8 +641,5 @@ const styles = StyleSheet.create({
     height: 288,
     marginLeft:-24
   },
-  scrollView:{
-   // height: 504
-    // Dimensions.get('window')*0.75
-  }
+
 });

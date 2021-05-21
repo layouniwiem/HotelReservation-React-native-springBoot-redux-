@@ -5,11 +5,11 @@ const USER_API_BASE_URL = config.link+'8099/api';
 
 
 
-export const hotelService = (url, method, body = {},token = "") => {
-  console.log('hotelService',url)
+export const cityService = (url, method, body = {},token = "") => {
+  console.log('cityService',url)
   return axios({
     method,
-    url: USER_API_BASE_URL + `/hotel${url}`,
+    url: USER_API_BASE_URL + `/Countries${url}`,
     data: body,
     headers: {
     //   ...composeToken(token),

@@ -12,6 +12,8 @@ import ProfileScreen from './ProfileScreen';
 import SearchResult from './SearchScreens/SearchResult';
 import ResultDetail from './SearchScreens/ResultDetail';
 import SearchRoom from './SearchScreens/SearchRoom/SearchRoom'
+import RoomDetail from './SearchScreens/SearchRoom/RoomDetail';
+import BookScreen from './SearchScreens/BookScreens/BookScreen';
 const HomeStack = createStackNavigator();
 const DetailsStack = createStackNavigator();
 
@@ -131,7 +133,32 @@ const HomeStackScreen = ({navigation}) => (
         )
         }} 
         />
-       
+        <HomeStack.Screen name="RoomDetail" component={RoomDetail}
+         options={{
+        title:' RoomDetail ',
+   
+        headerLeft: () => (
+            <Icon.Button name="ios-menu"
+             size={25} 
+             backgroundColor="#002E63"
+              onPress={() => navigation.openDrawer()
+              }></Icon.Button>
+        )
+        }} 
+        />
+           <HomeStack.Screen name="BookScreen" component={BookScreen}
+         options={{
+        title:' BookScreen ',
+   
+        headerLeft: () => (
+            <Icon.Button name="ios-menu"
+             size={25} 
+             backgroundColor="#002E63"
+              onPress={() => navigation.openDrawer()
+              }></Icon.Button>
+        )
+        }} 
+        />
 </HomeStack.Navigator>
 );
 

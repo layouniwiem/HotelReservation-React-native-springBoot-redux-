@@ -1,6 +1,7 @@
 
 import { useDispatch } from 'react-redux'
 import React, { useState, useEffect } from "react";
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   View,
   Text,
@@ -19,6 +20,7 @@ import {
   , indexGetAges
   , indexGetChildrens
   , indexGetEnfant
+  ,indexGetRooms
 } from '../../actions/indexAction'
 import { useSelector } from "react-redux";
 
@@ -29,11 +31,28 @@ const RoomScreen = params => {
   const [childrens, setChildrens] = React.useState(0);
   const [list, setList] = React.useState([]);
   const [ageList, setAgeList] = React.useState();
-  // const{agesValues,setAgesValues}=React.useState([]);
+ const{agesValues,setAgesValues}=React.useState([]);
   const [ages, setAges] = React.useState([]);
   const[index,setIndex]=React.useState();
+  const[roomdetail,setRoomDetail]=React.useState({
+    nbadults:1,
+    nbbabies:0,
+    nbchildrens:0,
+    agesList:[],
 
 
+  });
+ 
+  const handleChange = (nbadults,nbbabies,nbchildrens,agesList) => {
+    // const { name, value } = e.target;
+    setRoomDetail(roomdetail => ({
+        ...roomdetail,
+        [nbadults]: nbadults,
+        [nbbabies]: nbbabies,
+        [nbchildrens]: nbchildrens,
+        [agesList]: agesList,
+    }));
+};
 const setNewAge=(index,age)=>{
 a=ages;
 if (a.length<index)
@@ -45,6 +64,17 @@ if (a.length<index)
 setAges([...ages, a]);
 
 }
+const setNewRoom=(index,room)=>{
+  a=room;
+  if (a.length<index)
+    a.push(room)
+    else 
+    a[index]=room;
+  
+  
+    setRoomDetail([...roomdetail, a]);
+  
+  }
   const dispatch = useDispatch();
   const [count, setCount] = useState(0);
   useEffect(() => {
@@ -60,6 +90,8 @@ setAges([...ages, a]);
     dispatch(indexGetAges(ages));
     dispatch(indexGetChildrens(childrens));
     dispatch(indexGetEnfant(babies));
+    handleChange(adults,babies,childrens,ages)
+
 
     // console.log("state", state)
   }, [dispatch, adults, childrens, babies, ages]);
@@ -70,7 +102,13 @@ setAges([...ages, a]);
   }, [state]);
   let more = '>';
   let less = '<';
+  useEffect(() => {
+    console.log("roomdetail",roomdetail);
 
+ //   params.setRoomValues(roomdetail)
+    dispatch(indexGetRooms(roomdetail))
+  
+  }, [roomdetail]);
 
 
   return (
@@ -133,18 +171,20 @@ setAges([...ages, a]);
         <View style={styles.item1}>
 
 
-          <FontAwesome
+          {/* <FontAwesome
             name="baby"
             color="#05375a"
             size={20}
             marginRight={10}
-          />
-          <FontAwesome
+          /> */}
+          <MaterialCommunityIcons name="baby" color="#05375a" size={20}    marginRight={10}/>
+<MaterialCommunityIcons name="baby" color="#05375a" size={20}     marginRight={10}/>
+          {/* <FontAwesome
             name="baby"
             color="#05375a"
             size={20}
             marginRight={10}
-          />
+          /> */}
         </View>
         <View style={styles.item2}>
           <Text style={styles.text_footer} > {childrens} children(s )
@@ -309,6 +349,8 @@ const AgeSelectComponent = params => {
 const Rooms = params => {
   const [count, setCount] = useState(1);
   const [list, setList] = React.useState(initialList);
+  const{roomValues,setRoomValues}=React.useState();
+
   function handleAdd() {
     const newValue = count + 1;
     setCount(newValue);
@@ -325,6 +367,7 @@ const Rooms = params => {
     setList(newList);
 
   }
+
   return (
 
     <View>
@@ -361,7 +404,7 @@ const Rooms = params => {
       <View>
         <ScrollView>
           <RoomScreen />
-          {list.map((item) => {
+          {list.map((item,index) => {
             return <RoomScreen />
           })}
         </ScrollView>

@@ -10,19 +10,23 @@ import {
 
 } from 'react-native';
 import hotels from '../../model/hotels';
+import { useSelector } from "react-redux";
 
 import { InputAutoSuggest } from 'react-native-autocomplete-search';
 
 
 
 const CountryScreen = params => {
+  const stateCities = useSelector(state => state.cities)
+
   const [dataSource, setDataSource] = React.useState([
-    { id: '1', name: 'Paris' },
-    { id: '2', name: 'Pattanduru' },
-    { id: '3', name: 'Para' },
-    { id: '4', name: 'London' },
-    { id: '5', name: 'New York' },
-    { id: '6', name: 'Berlin' }
+    // { id: '1', name: 'Paris' },
+    // { id: '2', name: 'Pattanduru' },
+    // { id: '3', name: 'Para' },
+    // { id: '4', name: 'London' },
+    // { id: '5', name: 'New York' },
+    // { id: '6', name: 'Berlin' }
+    stateCities
   ]);
   const [isCountriesmodalVisible, setCountriesmodalVisible] = React.useState(false);
 
@@ -33,8 +37,8 @@ const CountryScreen = params => {
     setShowModal(false);
   };
   const handleSelectedItem = (item) => {
-    params.setCountySelected(item.name);
-    setSelectedItem(item.name);
+    params.setCountySelected(item.countryName);
+    setSelectedItem(item.countryName);
     console.log(item);
     params.setCountriesmodalVisible(false);
   }
@@ -50,14 +54,14 @@ const CountryScreen = params => {
 
           style={{ flex: 1 }}
           staticData={
-            dataSource}
+            dataSource.countryList}
           onDataSelectedChange={data =>
             console.log(data)
           }
         />
       </View>
       <FlatList
-        data={dataSource}
+        data={dataSource.countryList}
         renderItem={({ item }) => (
           <TouchableOpacity
 
@@ -69,7 +73,7 @@ const CountryScreen = params => {
 
             }
           >
-            <Text>{item.name}</Text>
+            <Text>{item.countryName}</Text>
           </TouchableOpacity>)
 
         }

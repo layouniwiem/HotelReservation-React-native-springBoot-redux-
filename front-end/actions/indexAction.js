@@ -61,3 +61,15 @@ import * as actions from "../actions/userTypes.js"
   
   }
   
+  export const indexGetRooms = (val) => async (dispatch) => {
+    try {
+      console.log("in indexGetRooms ")
+      dispatch({ type: actions.INDEX_LOADING });
+      dispatch({ type: actions.INDEX_GET_ROOMDATA, payload: val });
+      return "out of indexGetRooms ";
+    } catch (err) {
+      dispatch({ type: actions.INDEX_END_LOADING });
+      console.log("hello indexGetRooms INDEXError", err)
+    }
+  
+  }

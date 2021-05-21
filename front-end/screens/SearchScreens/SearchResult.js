@@ -21,15 +21,20 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ScrollView } from 'react-native-gesture-handler';
 import Autocomplete from 'react-native-autocomplete-input';
+import { getCurrentHotel } from "../../actions/currentDataActions";
 const SearchResult = ({ route, navigation }) => {
   const dispatch = useDispatch();
 
-  const hotelstate = useSelector(state => state.hotels.data.hotelResultList.hotelResult);
-  const hotels = useSelector(state => state.hotels.data);
+  // const hotelstate = useSelector(state => state.hotels.data.hotelResultList.hotelResult);
+  const hotels = useSelector(state => state.hotels);
+  // useEffect(() => {
+  //   console.log("state hotels result", hotelstate)
+  //   console.log("state hotels result")
+  // }, [hotelstate]);
   useEffect(() => {
-    console.log("state hotels result", hotelstate)
+    console.log("state hotels result", hotels.data)
     console.log("state hotels result")
-  }, [hotelstate]);
+  }, [hotels.data]);
   const [money, setMoney] = React.useState("TND")
   
   const handleStars = (value) => {
@@ -98,8 +103,10 @@ const SearchResult = ({ route, navigation }) => {
     const { res } = [];
     //console.log("hotzl",hotels[0])
 
-
-    setFilms(hotelstate);
+   ( hotels.data !== null )? (
+      setFilms(hotels.data.hotelResultList.hotelResult)
+    ):(  console.log("no data found"))
+    
     console.log(films)
     //setting the data in the films state
     // })
@@ -107,8 +114,9 @@ const SearchResult = ({ route, navigation }) => {
     //   alert(e);
     // });
     // console.log(films)
-  }, []);
+  }, [hotels.data]);
   return (
+     ( hotels.data !== null  ) ? (
 
     <View  >
       <SafeAreaView>
@@ -158,12 +166,13 @@ const SearchResult = ({ route, navigation }) => {
       
 
       <FlatList
-        data={hotelstate}
+        data={hotels.data.hotelResultList.hotelResult}
         keyExtractor={(item, index) => item.hotelInfo.hotelCode}
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('ResultDetail', { item })
+              dispatch(getCurrentHotel(item)) 
 
             }}
           >
@@ -235,7 +244,13 @@ const SearchResult = ({ route, navigation }) => {
       />
 </View>
     </View>
-  );
+  ):(
+    <View  >
+      <Text> no data found</Text>
+</View>
+
+
+  ))
 };
 
 

@@ -40,7 +40,7 @@ const {width: screenWidth} = Dimensions.get('window');
 
 const MyCarousel = props => {
   const [entries, setEntries] = useState();
-  const [data,setData]=useState([]);
+  const [data,setData]=useState();
  
   const carouselRef = useRef(null);
 
@@ -50,11 +50,11 @@ const MyCarousel = props => {
 
   useEffect(() => {
     console.log("props",props)
-    setData([...data,props]);
-    setEntries(data);
+    setData(props);
+    setEntries(props.data);
     console.log("props",props)
 
-  }, []);
+  }, [data]);
   useEffect(() => {
     console.log("props",props)
 
@@ -66,7 +66,7 @@ const MyCarousel = props => {
     return (
       <View style={styles.item}>
         <ParallaxImage
-          source={{uri: item.data.hotelInfo.hotelPicture}}
+          source={{uri: item}}
           containerStyle={styles.imageContainer}
           style={styles.image}
           parallaxFactor={0.4}

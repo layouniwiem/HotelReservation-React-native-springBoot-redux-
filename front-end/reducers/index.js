@@ -1,18 +1,18 @@
-import * as actions from "../actions/userTypes"
+import * as actions from "../actions/userTypes";
 const initialState = {
-    // data: null,
     nbAdult:1,
     nbChildren:0,
     nbInfant:0,
     childrenAgeList:[],
+    
     indexErr: "",
     loading: false,
-  //   rooms: [{
-  //     nbAdult:null,
-  //     nbChildren:null,
-  //     nbInfant:null,
-  //     childrenAgeList:[]
-  // }],
+    rooms: [{
+      nbAdult:1,
+      nbChildren:0,
+      nbInfant:0,
+      childrenAgeList:[]
+  }],
   };
 
 const reducer = (state = initialState, action) => {
@@ -77,6 +77,13 @@ const reducer = (state = initialState, action) => {
                       indexErr: "",
                       loading: false
                     }
+                    case actions.INDEX_GET_ROOMDATA:
+                      return{
+                        ...state,
+                          rooms:action.payload,
+                          indexErr: "",
+                          loading: false
+                      }
               default:
                 return state;
             

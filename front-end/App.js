@@ -9,17 +9,18 @@ import BookmarkScreen from './screens/BookmarkScreen';
 import SettingsScreen from './screens/SettingsScreen'
 import RootStackScreen from './screens/RootStackScreen';
 import { useEffect,useState } from 'react';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import store from './store/store';
 import { Provider } from 'react-redux';
+import { citiesGetAll } from './actions/cityAction';
 
 
 
-
+console.disableYellowBox = true;
 const Drawer = createDrawerNavigator();
 
-export default function App() {
+ const App =() =>{
  
 
   return (
@@ -34,6 +35,7 @@ const Applic=()=>{
 //   const state = store.getState();
 //   const authToken = state.userToken;  
 //  // console.log("userToken from App.js",user.userToken)
+const dispatch = useDispatch();
 
   const [isloggedin,setLogged] = useState(false)
   const detectLogin= async ()=>{
@@ -47,6 +49,23 @@ const Applic=()=>{
          setLogged(false)
      }
   }
+  const getCities=()=>{try {
+      
+    console.log("hello fromhandle search",date_CheckIN, date_CheckOut, roomsValue, ratingValue, nationality,nbAdult,nbChildren,nbInfant,childrenAgeList );
+    
+    dispatch(citiesGetAll()    
+
+    ).then((res) => {
+      console.log("res",res)
+
+
+    })
+    } catch (e) {
+    console.log("error",e);
+  }}
+  useEffect(()=>{
+    getCities();
+ })
  useEffect(()=>{
     detectLogin()
  },[])
@@ -85,3 +104,4 @@ const styles = StyleSheet.create({
 });
 
 
+export default App;

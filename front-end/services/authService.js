@@ -1,6 +1,7 @@
 import axios from 'axios';
-const USER_API_BASE_URL = 'http://192.168.1.192:8000';
-
+// const USER_API_BASE_URL = 'http://192.168.1.192:8001';
+import *  as config from '../config/strings.json'
+const USER_API_BASE_URL =config.link+ '8001/api';
 
 export const authsService = (url, method, body = {}) => {
   console.log('AuthService',url)
