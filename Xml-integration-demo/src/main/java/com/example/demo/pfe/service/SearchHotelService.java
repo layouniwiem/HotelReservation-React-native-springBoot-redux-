@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.demo.api.hotelbookingapi.AvailabilityAndPricingRequest;
 import com.example.demo.api.hotelbookingapi.AvailabilityAndPricingResponse;
+import com.example.demo.api.hotelbookingapi.DestinationCityListRequest;
+import com.example.demo.api.hotelbookingapi.DestinationCityListResponse;
 import com.example.demo.api.hotelbookingapi.HotelBookRequest;
 import com.example.demo.api.hotelbookingapi.HotelBookResponse;
 import com.example.demo.api.hotelbookingapi.HotelBookingDetailRequest;
@@ -22,6 +24,7 @@ import com.example.demo.pfe.dto.SearchHotel.BookHotelRequest;
 import com.example.demo.pfe.dto.SearchHotel.BookingHotelDetailRequest;
 import com.example.demo.pfe.dto.SearchHotel.CancellationHotelPolicyRequest;
 import com.example.demo.pfe.dto.SearchHotel.PricingAndAvailabilityRequest;
+import com.example.demo.pfe.dto.SearchHotel.RequestDestinationCityList;
 import com.example.demo.pfe.dto.SearchHotel.RoomHotelAvailabilityRequest;
 import com.example.demo.pfe.dto.SearchHotel.SearchHotelRequest;
 
@@ -66,6 +69,11 @@ public class SearchHotelService {
 		HotelBookRequest bookHotelRequest=  new HotelBookRequest (request);
 		return sendRequest.send(bookHotelRequest, new HotelBookResponse(), gds, 
 				"HotelBook");
+	}
+	public DestinationCityListResponse citiesDestination (RequestDestinationCityList request ) {
+		DestinationCityListRequest requestcitiesDestination =  new  DestinationCityListRequest (request);
+		return sendRequest.send(requestcitiesDestination, new DestinationCityListResponse(), gds, 
+				"DestinationCityList");
 	}
 
 public HotelBookingDetailResponse bookHotelDetail(BookingHotelDetailRequest request) {

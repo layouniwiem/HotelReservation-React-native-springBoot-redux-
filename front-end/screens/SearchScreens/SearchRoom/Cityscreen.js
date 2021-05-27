@@ -9,56 +9,33 @@ import {
   TouchableOpacity,
 
 } from 'react-native';
-import hotels from '../../model/hotels';
 import { useSelector } from "react-redux";
 import Autocomplete from 'react-native-autocomplete-input';
 import { InputAutoSuggest } from 'react-native-autocomplete-search';
 import { useState } from 'react';
 import { SafeAreaView } from 'react-native';
 import { useDispatch } from 'react-redux'
-import { indexCountry, indexGetCountry } from '../../actions/indexAction';
-import { citiesDestGetAll } from '../../actions/cityAction';
- import Myloader from '../Myloader';
-
-
-
-const CountryScreen = params => {
+import { indexGetCountry } from '../../../actions/indexAction';
+const CityScreen = params => {
   const dispatch = useDispatch();
 
-  const stateCities = useSelector(state => state.cities)
-  const [films, setFilms] = useState(stateCities.data.countryList.country);
+  const stateCities = useSelector(state => state.citiesDest)
+  const [films, setFilms] = useState(stateCities.data.cityList.city);
   // For Filtered Data
   const [filteredFilms, setFilteredFilms] = useState(films);
   // For Selected Data
   const [selectedValue, setSelectedValue] = useState({});
  
-  // console.log (stateCities.data.cityList.city,"dataaa cities")
   const [isCountriesmodalVisible, setCountriesmodalVisible] = React.useState(false);
-  const[showLoader,setShowLoader]= React.useState(false);
 
   const [showModal, setShowModal] = React.useState();
 
   const [selectedItem, setSelectedItem] = React.useState();
-  const getCitiesDest=(val)=>{try {
-      
-    console.log("hello fromhandle getCitiesDest"
-     );
+  React.useEffect(() => {
+    console.log("selectedValue",selectedValue)
+    dispatch(indexGetCountry(selectedValue));
     
-    dispatch(citiesDestGetAll({"countryCode":val})    
-
-    ).then((res) => {
-      console.log("res",res)
-      setShowLoader(false) 
-
-
-    })
-    setShowLoader(true)
-    } catch (e) {
-    console.log("error res getCitiesDest",e);
-  }}
-  
- 
-  
+  }, [selectedValue])
 
   const findFilm = (query) => {
     // Method called every time when we change the value of the input
@@ -67,7 +44,7 @@ const CountryScreen = params => {
       const regex = new RegExp(`${query.trim()}`, 'i');
       // Setting the filtered film array according the query
       setFilteredFilms(
-          films.filter((film) => film.countryName.search(regex) >= 0)
+          films.filter((film) => film.cityName.search(regex) >= 0)
       );
     } else {
       // If the query is null then return blank
@@ -78,19 +55,19 @@ const CountryScreen = params => {
     setShowModal(false);
   };
   const handleSelectedItem = (item) => {
-    params.setCountySelected(item.countryName);
-    getCitiesDest(item.countryCode);
-    console.log(item.countryCode)
-    setSelectedItem(item.countryName);
-    dispatch(indexCountry(item))
-    console.log(item);
-    params.setCountriesmodalVisible(false);
+    params.setCitySelected(item.cityName);
+    setSelectedItem(item);
+    dispatch(indexGetCountry(item));
+
+    console.log(item,"item");
+    params.setCitiesmodalVisible(false);
   }
   const showCountriesPicker = () => {
     setShowModal(true);
   }
   
   return (
+    (stateCities.data!==null||stateCities.data.countryList.country)?(
     <View style={styles.modalView}>
       {/* <Text> Hello countries </Text> */}
       <View style={styles.autocompleteContainer}>
@@ -100,18 +77,22 @@ const CountryScreen = params => {
           autoCapitalize="none"
           autoCorrect={false}
           containerStyle={styles.autocompleteContainer}
-    
+          // Data to show in suggestion
+          // data={filteredFilms}
+          // Default value if you want to set something in input
           defaultValue={
             JSON.stringify(selectedValue) === '{}' ?
             '' :
-            selectedValue.countryName
+            selectedValue.cityName
           }
-         
+          // Onchange of the text changing the state of the query
+          // Which will trigger the findFilm method
+          // To show the suggestions
           onChangeText={(text) => findFilm(text)}
-          placeholder="Enter the city Name"
-    
+          placeholder="Enter the city "
+        
         />
-        <View style={styles.descriptionContainer}>
+       <View style={styles.descriptionContainer}>
           {films.length > 0 ? (
             <>
               <Text style={styles.infoText}>
@@ -123,13 +104,13 @@ const CountryScreen = params => {
             </>
           ) : (
             <Text style={styles.infoText}>
-                Enter The county Name
+                Enter The city Name
             </Text>
           )}
         </View>
       </View>
     </SafeAreaView>
-     
+        
       </View> 
 
       <FlatList
@@ -146,28 +127,23 @@ const CountryScreen = params => {
             }}>
               <View style={styles.action}>
             <Text style={styles.text}>
-                {item.countryName}
+                {item.cityName}
             </Text>
             </View>
           </TouchableOpacity>
         )}
-        
+       
       />
-      <Modal
-        transparent={true}
-        visible={showLoader}
-        animationType='slide'
+      
+    </View>):(
+      <View>
+        <Text> no data found</Text>
+      </View>
 
-      >
-        <Myloader 
-        
-        />
-
-      </Modal>
-    </View>
+    )
   );
 }
-export default CountryScreen;
+export default CityScreen;
 const styles = StyleSheet.create({
   autocompleteContainer: {
     flex: 1,

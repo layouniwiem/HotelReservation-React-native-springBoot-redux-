@@ -7,6 +7,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import com.example.demo.pfe.dto.SearchHotel.RequestDestinationCityList;
+
 
 /**
  * <p>Classe Java pour anonymous complex type.
@@ -41,7 +43,19 @@ public class DestinationCityListRequest {
     @XmlElement(name = "ReturnNewCityCodes")
     protected String returnNewCityCodes;
 
-    /**
+    
+    
+    
+    public DestinationCityListRequest() {
+	}
+
+	public DestinationCityListRequest(RequestDestinationCityList request) {
+		// TODO Auto-generated constructor stub
+    	this.countryCode=request.getCountryCode();
+    	this.returnNewCityCodes = "true";
+	}
+
+	/**
      * Obtient la valeur de la propri�t� countryCode.
      * 
      * @return

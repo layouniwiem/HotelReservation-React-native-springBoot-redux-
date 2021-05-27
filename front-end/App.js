@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import store from './store/store';
 import { Provider } from 'react-redux';
-import { citiesGetAll } from './actions/cityAction';
+import { citiesGetAll,citiesDestGetAll } from './actions/cityAction';
 
 
 
@@ -51,24 +51,41 @@ const dispatch = useDispatch();
   }
   const getCities=()=>{try {
       
-    console.log("hello fromhandle search",date_CheckIN, date_CheckOut, roomsValue, ratingValue, nationality,nbAdult,nbChildren,nbInfant,childrenAgeList );
+    console.log("hello fromhandle getCities"
+     );
     
     dispatch(citiesGetAll()    
 
     ).then((res) => {
-      console.log("res",res)
+      // console.log("res",res)
 
 
     })
     } catch (e) {
-    console.log("error",e);
+    console.log("error res countries",e);
   }}
-  useEffect(()=>{
-    getCities();
- })
+  const getCitiesDest=()=>{try {
+      
+    console.log("hello fromhandle getCitiesDest"
+     );
+    
+    dispatch(citiesDestGetAll()    
+
+    ).then((res) => {
+      // console.log("res",res)
+
+
+    })
+    } catch (e) {
+    console.log("error res getCitiesDest",e);
+  }}
+  
  useEffect(()=>{
     detectLogin()
  },[])
+ useEffect(()=>{
+  getCities();
+})
  const state = useSelector(state => state.users)
  console.log("state.userToken ",state.userToken)
 

@@ -60,6 +60,30 @@ import * as actions from "../actions/userTypes.js"
     }
   
   }
+  export const indexGetCountry = (val) => async (dispatch) => {
+    try {
+      console.log("in indexGetCountry Citycode ")
+      dispatch({ type: actions.INDEX_LOADING });
+      dispatch({ type: actions.INDEX_GET_COUNTRY, payload: val });
+      return "out of indexGetages ";
+    } catch (err) {
+      dispatch({ type: actions.INDEX_END_LOADING });
+      console.log("hello INDEXError", err)
+    }
+  
+  }
+  export const indexCountry = (val) => async (dispatch) => {
+    try {
+      console.log("in indexCountry ")
+      dispatch({ type: actions.INDEX_LOADING });
+      dispatch({ type: actions.INDEXCOUNTRY_GET_DATA, payload: val });
+      return "out of indexCountry ";
+    } catch (err) {
+      dispatch({ type: actions.INDEX_END_LOADING });
+      console.log("hello INDEXError", err)
+    }
+  
+  }
   
   export const indexGetRooms = (val) => async (dispatch) => {
     try {

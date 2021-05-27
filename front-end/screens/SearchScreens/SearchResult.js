@@ -80,7 +80,7 @@ const SearchResult = ({ route, navigation }) => {
     }  
   }
   const [films, setFilms] = useState([]);
-  const [filteredFilms, setFilteredFilms] = useState([]);
+  const [filteredFilms, setFilteredFilms] = useState(hotels.data.hotelResultList.hotelResult);
   const [selectedValue, setSelectedValue] = useState({});
   const findFilm = (query) => {
     //method called everytime when we change the value of the input
@@ -89,7 +89,7 @@ const SearchResult = ({ route, navigation }) => {
       const regex = new RegExp(`${query.trim()}`, 'i');
       console.log("searching for name")
       //setting the filtered film array according the query from the input
-      setFilteredFilms(films.filter((film) => film.name.search(regex) >= 0));
+      setFilteredFilms(films.filter((film) => film.hotelName.search(regex) >= 0));
     } else {
       //if the query is null then return blank
       setFilteredFilms([]);
@@ -116,8 +116,14 @@ const SearchResult = ({ route, navigation }) => {
     // console.log(films)
   }, [hotels.data]);
   return (
-     ( hotels.data !== null  ) ? (
-
+     ( hotels.data.hotelResultList == null  ||  hotels.data == null ||  hotels.data.hotelResultList.hotelResult == null ) ? (
+      
+        <View  >
+          <Text> no data found</Text>
+    </View>
+    
+    
+      ):(
     <View  >
       <SafeAreaView>
         <View  >
@@ -127,7 +133,7 @@ const SearchResult = ({ route, navigation }) => {
               autoCorrect={false}
               containerStyle={styles.autocompleteContainer}
               //data to show in suggestion
-              data={filteredFilms}
+             // data={filteredFilms}
               //default value if you want to set something in input
               defaultValue={
                 JSON.stringify(selectedValue) === '{}' ? '' : selectedValue.title}
@@ -164,9 +170,9 @@ const SearchResult = ({ route, navigation }) => {
       <View style={{margin:2}}>
 
       
-
+     
       <FlatList
-        data={hotels.data.hotelResultList.hotelResult}
+        data={filteredFilms}
         keyExtractor={(item, index) => item.hotelInfo.hotelCode}
         renderItem={({ item }) => (
           <TouchableOpacity
@@ -244,12 +250,6 @@ const SearchResult = ({ route, navigation }) => {
       />
 </View>
     </View>
-  ):(
-    <View  >
-      <Text> no data found</Text>
-</View>
-
-
   ))
 };
 

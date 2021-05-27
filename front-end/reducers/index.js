@@ -4,6 +4,8 @@ const initialState = {
     nbChildren:0,
     nbInfant:0,
     childrenAgeList:[],
+    countryCode:"",
+    Country:"",
     
     indexErr: "",
     loading: false,
@@ -23,13 +25,13 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 loading: true,
               };
-            // case actions.INDEX_GET_DATA:
-            //   return {
-            //     ...state,
-            //     data: action.payload,
-            //     indexErr: "",
-            //     loading: false
-            //   };
+            case actions.INDEXCOUNTRY_GET_DATA:
+              return {
+                ...state,
+                country: action.payload,
+                indexErr: "",
+                loading: false
+              };
             case actions.INDEX_FAILURE:
               return {
                 ...state,
@@ -60,6 +62,13 @@ const reducer = (state = initialState, action) => {
                 return{
                   ...state,
                   nbInfant: action.payload,
+                  indexErr: "",
+                  loading: false
+                }
+                case actions.INDEX_GET_COUNTRY:
+                return{
+                  ...state,
+                  countryCode: action.payload,
                   indexErr: "",
                   loading: false
                 }

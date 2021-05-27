@@ -16,4 +16,14 @@ export const cityService = (url, method, body = {},token = "") => {
     },
   });
 }
-
+export const cityDestService = (url, method, body,token = "") => {
+  console.log('in cityDestService body',body)
+  return axios({
+    method,
+    url: USER_API_BASE_URL + `/Destinations${url}`,
+    data: body,
+    headers: {
+    //   ...composeToken(token),
+    },
+  });
+}

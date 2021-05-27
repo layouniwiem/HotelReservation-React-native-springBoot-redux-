@@ -22,6 +22,7 @@ import moment from "moment";
 import { hotelsGetAll } from '../../actions/hotelsActions';
 import { useDispatch } from 'react-redux'
 import Myloader from '../Myloader';
+import CityScreen from './SearchRoom/Cityscreen';
 const HomeScreen = ({ route, navigation }) => {
   const [ratingValue, SetRatingValue] = useState(0);
   const [isshowRatingModal, setIsShowRatingModal] = React.useState(false);
@@ -60,7 +61,9 @@ date= moment(new Date()).format("YYYY-MM-DD");
   const [isDatePickerVisible2, setDatePickerVisibility2] = useState(false);
   const [isRoomModalVisible, setIsRoomModalVisible] = useState(false);
   const [isCountriesmodalVisible, setCountriesmodalVisible] = useState(false);
-  const [isSelectedItem, setSelectedItem] = useState("Turkey");
+  const [isCitiesmodalVisible, setCitiesmodalVisible] = useState(false);
+
+  const [isSelectedItem, setSelectedItem] = useState(null);
   const [count, setCount] = useState(0);
   const [nationality, SetNationality] = useState("TN")
   const [isRoomsmodalVisible, setRoomsmodalVisible] = useState(false);
@@ -71,21 +74,23 @@ date= moment(new Date()).format("YYYY-MM-DD");
   const statehotel = useSelector(state => state.hotels)
   const stateCities = useSelector(state => state.cities)
 
-  const handleSearch = (date_CheckIN, date_CheckOut, roomsValue, ratingValue, nationality,nbAdult,nbChildren,nbInfant,childrenAgeList) => {
+  const handleSearch = (date_CheckIN, date_CheckOut, roomsValue, ratingValue, nationality,nbAdult,nbChildren,nbInfant,childrenAgeList,codeCityTBO) => {
     if (ratingValue=="All")
       SetRatingValue(0);
     
     try {
       
-      console.log("hello fromhandle search",date_CheckIN, date_CheckOut, roomsValue, ratingValue, nationality,nbAdult,nbChildren,nbInfant,childrenAgeList );
+      console.log("hello fromhandle search",date_CheckIN, date_CheckOut, roomsValue, ratingValue, nationality,nbAdult,nbChildren,nbInfant,childrenAgeList,codeCityTBO );
       
       dispatch(hotelsGetAll({
         'checkIn': date_CheckIN,
         'checkOut': date_CheckOut,
-        'codeCityTBO': "130452",
+        // 'codeCityTBO': "130452",
+
+         'codeCityTBO': state.countryCode.cityCode,
         "nbRooms":roomsValue,
         "ratings":ratingValue,
-        "nationality":nationality,
+        "nationality":state.country.countryCode,
       
         "rooms":[ 
           {
@@ -93,7 +98,8 @@ date= moment(new Date()).format("YYYY-MM-DD");
               "nbChildren": nbChildren,
               "nbInfant": nbInfant,
               "childrenAgeList":childrenAgeList
-          }
+          },
+          
       ]
       }     
       )
@@ -150,12 +156,14 @@ date= moment(new Date()).format("YYYY-MM-DD");
     hideDatePicker();
   };
 
-
+console.log(state.countryCode.cityCode,"state.countryCode.cityCode")
 
   const [dataSource, setDataSource] = React.useState([
     { name: 'Tunisie', key: "0" }, { name: 'France', key: "1" }, { name: 'Italie', key: "2" }
   ]);
-  const [counrtySelected, setCountySelected] = useState('Tunisie');
+  const [counrtySelected, setCountySelected] = useState(null);
+  const [citySelected, setCitySelected] = useState(null);
+
   return (
 
 
@@ -173,7 +181,8 @@ date= moment(new Date()).format("YYYY-MM-DD");
                  state.nbAdult,
                  state.nbChildren
                  ,state.nbInfant
-                 ,ageList) 
+                 ,ageList,
+                 state.countryCode.cityCode) 
             }}
           >
 
@@ -189,8 +198,6 @@ date= moment(new Date()).format("YYYY-MM-DD");
               <Text style={styles.signIn, {
                 color: '#fff'
               }} >  I need place Tonight  </Text>
-
-
             </LinearGradient>
           </TouchableOpacity>
         </View>
@@ -208,7 +215,7 @@ date= moment(new Date()).format("YYYY-MM-DD");
           />
 
 
-          <Text style={styles.text}> Destination
+          <Text style={styles.text}> Destination Country
              </Text>
 
           <Text style={{
@@ -220,6 +227,37 @@ date= moment(new Date()).format("YYYY-MM-DD");
             marginLeft: -70,
           }}>
             {counrtySelected}
+          </Text>
+
+        </View>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() =>      {(counrtySelected !=null )?
+          setCitiesmodalVisible(true) :
+          alert('Choose Country First')} }
+      >
+        <View style={styles.action}>
+
+          <FontAwesome
+            name="map-marker"
+            color="#05375a"
+            size={20}
+            marginRight={10}
+          />
+
+
+          <Text style={styles.text}> Destination city
+             </Text>
+
+          <Text style={{
+
+            marginTop: 25,
+            color: '#05375a',
+            fontSize: 12,
+
+            marginLeft: -70,
+          }}>
+            {citySelected}
           </Text>
 
         </View>
@@ -351,6 +389,18 @@ date= moment(new Date()).format("YYYY-MM-DD");
         <CountryScreen
           setCountySelected={setCountySelected}
           setCountriesmodalVisible={setCountriesmodalVisible}
+        />
+
+      </Modal>
+      <Modal
+        transparent={true}
+        visible={isCitiesmodalVisible}
+        animationType='slide'
+
+      >
+        <CityScreen
+          setCitySelected={setCitySelected}
+          setCitiesmodalVisible={setCitiesmodalVisible}
         />
 
       </Modal>

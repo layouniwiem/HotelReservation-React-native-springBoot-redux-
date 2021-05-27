@@ -35,26 +35,26 @@ const BookScreen= ({navigation})=>{
     const [checked, setChecked] = React.useState();
     const [checkedBoxRed, setCheckedBoxRed] = React.useState(false);
 console.log(state)
-    const [data, setData]= React.useState({
-        email:'',
-        password:'',
-        userName:'',
-        roles:'',
-        confirm_password:'',
-        check_textInputChange: false ,
-        secureTextEntry: true,
-        confirm_secureTextEntry: true,
-        active:true,
+//     const [data, setData]= React.useState({
+//         email:'',
+//         password:'',
+//         userName:'',
+//         roles:'',
+//         confirm_password:'',
+//         check_textInputChange: false ,
+//         secureTextEntry: true,
+//         confirm_secureTextEntry: true,
+//         active:true,
 
-    });
-   const  user ={
-       email: data.email,
-       password:data.password,
-       userName:data.email,
-       active:true,
-       roles:"USER",
-       active:true,
-   };
+//     });
+//    const  user ={
+//        email: data.email,
+//        password:data.password,
+//        userName:data.email,
+//        active:true,
+//        roles:"USER",
+//        active:true,
+//    };
   
 
    const dispatch = useDispatch();
@@ -67,49 +67,67 @@ console.log(state)
         
       
       };
-    const handlePasswordChange= (val)=>{
-        setData({
-            ...data,
-            password:val
-        });
-    }
-    const handleConfirmPasswordChange= (val)=>{
-        setData({
-            ...data,
-            confirm_password:val
-        });
-    }
-    const updateSecureTextEntry=()=>{
-        setData({
-            ...data,
-            secureTextEntry: !data.secureTextEntry
-        })
-    }
-    const updateConfirmSecureTextEntry=()=>{
-        setData({
-            ...data,
-            confirm_secureTextEntry: !data.confirm_secureTextEntry
-        })
+      const [list, setList] = React.useState([{ id: 'ar', name: '', },{ id: 'ar', name: '', }]);
+
+      const handleInfoScreens=( val)=>{
+      
+        // for(var i=0;i<val;i++){
+        //     setList([...list, { id: 'ar', name: '', }]);
+        // }
+       var a=handleInfos(val);
+           
+        a.map((item,index) => {
+            return <InfoScreen setCheck={setCheck}/>
+           })
+            
+            
+    
         
     }
-    const textInputChange=(val)=>{
-        if (val.length > 6 ){
-            setData({
-                ...data,
-                email: val,
-                check_textInputChange: true 
-            });
-        }else   {
-            setData({
-                ...data,
-                email: val,
-                check_textInputChange: false 
+    
+    // const handlePasswordChange= (val)=>{
+    //     setData({
+    //         ...data,
+    //         password:val
+    //     });
+    // }
+    // const handleConfirmPasswordChange= (val)=>{
+    //     setData({
+    //         ...data,
+    //         confirm_password:val
+    //     });
+    // }
+    // const updateSecureTextEntry=()=>{
+    //     setData({
+    //         ...data,
+    //         secureTextEntry: !data.secureTextEntry
+    //     })
+    // }
+    // const updateConfirmSecureTextEntry=()=>{
+    //     setData({
+    //         ...data,
+    //         confirm_secureTextEntry: !data.confirm_secureTextEntry
+    //     })
+        
+    // }
+    // const textInputChange=(val)=>{
+    //     if (val.length > 6 ){
+    //         setData({
+    //             ...data,
+    //             email: val,
+    //             check_textInputChange: true 
+    //         });
+    //     }else   {
+    //         setData({
+    //             ...data,
+    //             email: val,
+    //             check_textInputChange: false 
 
-            }); 
-        }    
+    //         }); 
+    //     }    
 
 
-    }
+    // }
     const handleStars = (value) => {
         var stars = []
         let val=handleStartsValue(value);
@@ -130,6 +148,21 @@ console.log(state)
         return stars
     
       }
+      const handleInfos = (value) => {
+        var stars = []
+        // let val=handleStartsValue(value);
+        console.log("value",value)
+    
+        
+    
+        for (let i = 1; i <= value; i++) {
+          stars.push("a");
+    
+        }
+        return stars
+    
+      }
+      
       const handleStartsValue=(value)=>{
         switch (value) {
           case 'ONE_STAR':
@@ -152,6 +185,8 @@ console.log(state)
             
         }  
       }
+    //   const data=handleInfos(5)
+    
     return (
        
         <View style={ styles.container} >
@@ -185,7 +220,19 @@ console.log(state)
                         </View>
                     </View>
 </View></View>
-                <InfoScreen setCheck={setCheck}/>
+                {/* <InfoScreen setCheck={setCheck}/>
+                */}
+          
+                     {list.map((item,index) => {
+            return <InfoScreen setCheck={setCheck}/>
+           })}
+      <View>{handleInfoScreens(6)}</View>   
+        
+     
+
+
+
+
                 {(check==true && checkHided == false)?
                 <View style={styles.containerShadow}>
                 <View style={styles.action2}>

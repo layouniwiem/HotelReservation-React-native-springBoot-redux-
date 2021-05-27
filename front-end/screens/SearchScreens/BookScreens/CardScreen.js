@@ -22,7 +22,9 @@ import EVoucher from './EVoucherScreen';
 import { useSelector } from "react-redux";
 import { Checkbox } from 'react-native-paper';
 import EFacture from './EFacture';
-const CardScreen = ({ navigation, showIt },params) => {
+import { useNavigation } from '@react-navigation/core';
+const CardScreen = ({ showIt },params) => {
+    const navigation = useNavigation()
     const state = useSelector(state => state.currentData);
     const hotels = useSelector(state => state.hotels.data);
     const [checkedBox, setCheckedBox] = React.useState(false);
@@ -270,7 +272,9 @@ const CardScreen = ({ navigation, showIt },params) => {
 
                     <TouchableOpacity
 
-                        onPress={() => {setCheck(true);
+                        onPress={() => {
+                            navigation.navigate('EVoucher');
+                            setCheck(true);
                             setHide(true);
                            
 }}

@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.api.hotelbookingapi.AvailabilityAndPricingResponse;
+import com.example.demo.api.hotelbookingapi.CountryListRequest;
+import com.example.demo.api.hotelbookingapi.CountryListResponse;
 import com.example.demo.api.hotelbookingapi.HotelBookResponse;
 import com.example.demo.api.hotelbookingapi.HotelBookingDetailResponse;
 import com.example.demo.api.hotelbookingapi.HotelCancellationPolicyResponse;
@@ -31,7 +33,6 @@ import com.example.demo.pfe.service.SendRequest;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api")
-//@RequestMapping("*")
 public class SearchHotelController {
 
 	@Autowired
@@ -76,4 +77,5 @@ public class SearchHotelController {
 //		return searchHotelService.sayhello();
 		return "hiiiiii from searchHotelService";
 	}
+
 }
