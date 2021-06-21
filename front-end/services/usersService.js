@@ -1,6 +1,6 @@
 import axios from 'axios';
 import *  as config from '../config/strings.json'
-const USER_API_BASE_URL =config.link+ '8001/api';
+const USER_API_BASE_URL =config.link+ '8098/api';
 
 const composeToken = (token) =>
   token ? { Authorization: `Bearer ${token}` } : {};

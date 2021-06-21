@@ -8,34 +8,7 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
-// const ENTRIES1 = []
-const ENTRIES1 = [
-  {
-    title: 'Beautiful and dramatic Antelope Canyon',
-    subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
-    illustration: 'https://i.imgur.com/UYiroysl.jpg',
-  },
-  {
-    title: 'Earlier this morning, NYC',
-    subtitle: 'Lorem ipsum dolor sit amet',
-    illustration: 'https://i.imgur.com/UPrs1EWl.jpg',
-  },
-  {
-    title: 'White Pocket Sunset',
-    subtitle: 'Lorem ipsum dolor sit amet et nuncat ',
-    illustration: 'https://i.imgur.com/MABUbpDl.jpg',
-  },
-  {
-    title: 'Acrocorinth, Greece',
-    subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
-    illustration: 'https://i.imgur.com/KZsmUi2l.jpg',
-  },
-  {
-    title: 'The lone tree, majestic landscape of New Zealand',
-    subtitle: 'Lorem ipsum dolor sit amet',
-    illustration: 'https://i.imgur.com/2nCt3Sbl.jpg',
-  },
-];
+
 const {width: screenWidth} = Dimensions.get('window');
 
 const MyCarousel = props => {
@@ -49,20 +22,20 @@ const MyCarousel = props => {
   };
 
   useEffect(() => {
-    console.log("props",props)
+    // console.log("props",props)
     setData(props);
     setEntries(props.data);
-    console.log("props",props)
+    // console.log("props",props)
 
   }, [data]);
   useEffect(() => {
-    console.log("props",props)
+    // console.log("props",props)
 
-    console.log("data from Mycarrousel",data)
+    // console.log("data from Mycarrousel",data)
 
   }, [data]);
    const renderItem = ({item, index}, parallaxProps) => {
-     console.log("renderItem",item)
+    //  console.log("renderItem",item)
     return (
       <View style={styles.item}>
         <ParallaxImage

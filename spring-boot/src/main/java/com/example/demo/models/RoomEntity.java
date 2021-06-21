@@ -1,5 +1,7 @@
 package com.example.demo.models;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,9 +13,9 @@ import javax.persistence.Table;
 @Table(name = "rooms")
 public class RoomEntity {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+
 	@Column(name = "ID", unique = true, nullable = false, precision = 22, scale = 0)
-	private long id;
+	private BigDecimal id;
 	@Column(name = "prixTotal")
 	private String prixTotal;
 	@Column(name = "room_Type")
@@ -29,18 +31,21 @@ public class RoomEntity {
 		return "RoomEntity [id=" + id + ", prixTotal=" + prixTotal + ", room_Type=" + room_Type + ", room_Name="
 				+ room_Name + ", reservation_id=" + reservation_id + "]";
 	}
-	public RoomEntity(long id, String prixTotal, String room_Type, String room_Name, long reservation_id) {
+	public RoomEntity( String prixTotal, String room_Type, String room_Name, long reservation_id) {
 		super();
-		this.id = id;
+	
 		this.prixTotal = prixTotal;
 		this.room_Type = room_Type;
 		this.room_Name = room_Name;
 		this.reservation_id = reservation_id;
 	}
-	public long getId() {
+	public RoomEntity() {
+		// TODO Auto-generated constructor stub
+	}
+	public BigDecimal getId() {
 		return id;
 	}
-	public void setId(long id) {
+	public void setId(BigDecimal id) {
 		this.id = id;
 	}
 	public String getPrixTotal() {

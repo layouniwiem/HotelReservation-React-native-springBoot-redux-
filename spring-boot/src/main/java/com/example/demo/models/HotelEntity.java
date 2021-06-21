@@ -1,6 +1,7 @@
 package com.example.demo.models;
 
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -16,9 +17,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Table(name = "hotels")
 public class HotelEntity {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID", unique = true, nullable = false, precision = 22, scale = 0)
-	private long id;
+	private BigDecimal id;
 	@Column(name = "hotelCode")
 	private String hotelCode;
 	@Column(name = "hotelName")
@@ -29,11 +29,13 @@ public class HotelEntity {
 	private String adress ;
 	@Column(name = "rating")
 	private String rating ;
+	@Column(name = "image")
+	private String image ;
 	
-	public long getId() {
+	public BigDecimal getId() {
 		return id;
 	}
-	public void setId(long id) {
+	public void setId(BigDecimal id) {
 		this.id = id;
 	}
 	public String getHotelCode() {
@@ -66,28 +68,34 @@ public class HotelEntity {
 	public void setRating(String rating) {
 		this.rating = rating;
 	}
+
+//	}
 	
-//	public Set<RoomEntity> getAvailablerooms() {
-//		return availablerooms;
-//	}
-//	public void setAvailablerooms(Set<RoomEntity> availablerooms) {
-//		this.availablerooms = availablerooms;
-//	}
-	public HotelEntity(long id, String hotelCode, String hotelName, String prixTotal, String adress, String rating,
-			ReservationEntity reservation, Set<RoomEntity> availablerooms) {
+	public HotelEntity() {
+		// TODO Auto-generated constructor stub
+	}
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
+	}
+	public HotelEntity( String hotelCode, String hotelName, String prixTotal, String adress, String rating,
+			String image, Set<RoomEntity> availablerooms) {
 		super();
-		this.id = id;
+		
 		this.hotelCode = hotelCode;
 		this.hotelName = hotelName;
 		this.prixTotal = prixTotal;
 		this.adress = adress;
 		this.rating = rating;
+		this.image = image;
 	}
 	@Override
 	public String toString() {
 		return "HotelEntity [id=" + id + ", hotelCode=" + hotelCode + ", hotelName=" + hotelName + ", prixTotal="
-				+ prixTotal + ", adress=" + adress + ", rating=" + rating + ", reservation=" 
-//				+ ", availablerooms=" + availablerooms 
+				+ prixTotal + ", adress=" + adress + ", rating=" + rating + ", image=" + image
+//				
 				+ "]";
 	}
 

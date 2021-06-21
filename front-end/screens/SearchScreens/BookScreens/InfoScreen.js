@@ -1,6 +1,6 @@
   
-import React from 'react';
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 
 import { 
@@ -11,6 +11,7 @@ import {
     Platform,
     StyleSheet ,
     Dimensions,
+    Modal
 
 } from 'react-native';
 
@@ -19,10 +20,17 @@ import { LinearGradient } from 'expo-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import { Checkbox } from 'react-native-paper';
-
+import { inviteePostData } from '../../../actions/reservationAction';
+import Myloader from '../../Myloader';
+import { useNavigation } from '@react-navigation/native';
 const InfoScreen= (params)=>{
-    const [money, setMoney] = React.useState("  ")
- 
+    const navigation = useNavigation();
+    const roomsDB = useSelector(state => state.roomsDB.data);
+const dataIndexx =params.dataIndex
+    const [here,SetHere] = React.useState(true )
+    const[showLoader,setShowLoader]= React.useState(false);
+    const dispatch = useDispatch();
+    const stateindexData = useSelector(state => state.indexData)
     const [checkedBox, setCheckedBox] = React.useState(true);
     const [checkedBoxCancel, setCheckedBoxCancel] = React.useState(false);
     const [checkedBoxRed, setCheckedBoxRed] = React.useState(false);
@@ -31,10 +39,10 @@ const InfoScreen= (params)=>{
         lastName:'',
         firstName:'',
         gender:'male',
-        email:'',
-        password:'',
+        email:'email@email.com',
+       
         userName:'',
-        roles:'',
+       
         confirm_password:'',
         check_textInputChange: false ,
         secureTextEntry: true,
@@ -49,14 +57,16 @@ const InfoScreen= (params)=>{
 
     
    };
-  
+
    const [dataSet,setDataSet]= React.useState(false);
-   const handleDataSet=()=>{
+   const handleDataSet=()=>{ 
+       
     params.setCheck(true);
+    
 
    }
+   
 // const {dataSet}=false
-   const dispatch = useDispatch();
 
    // const addUser = (email,username,password) => dispatch(userPostData(email,username,password));
     const handleaddUser = async (e,name) => {
@@ -85,6 +95,7 @@ const InfoScreen= (params)=>{
         });
     }
     const handlegender= (val)=>{
+        console.log(val,"genderrrr");
         setData({
             ...data,
             gender:val
@@ -127,13 +138,33 @@ const InfoScreen= (params)=>{
 
 
     }
-    
+    const handleAddInvitee = ( email, firstName, lastName, gender,id_Room) => {
+        try {
+          console.log("hello handleAddInvitee ", email, firstName, lastName, gender,id_Room );
+          
+          dispatch(inviteePostData({
+            'email': firstName+"@gmail.com",
+            'firstName': firstName,
+            // 'codeCityTBO': "130452",
+             'lastName': lastName,
+            "gender":gender,
+            "id_Room":id_Room,
+          }     
+          )
+          ).then((res) => {
+            setShowLoader(false) 
+            console.log("res inviteePostData",res,"inviteePostData")
+          })
+          setShowLoader(true)    } catch (e) {
+          console.log("error",e);
+        }
+      }
+      useEffect(() => {
+        console.log("roomsDBbbbbbbbbb",roomsDB,"roomsDBbbbbbbbbbb")
+      }, [roomsDB])
     return (
-       
+       (here==true)?(
         <View style={ styles.container} >
-             
-            
- 
         <Animatable.View 
         animation="fadeInUp"
         style={ styles.footer} >
@@ -144,19 +175,21 @@ const InfoScreen= (params)=>{
                                 color="#FFBF00"
                                     status={checkedBox ? 'checked' : 'unchecked'}
                                     onPress={() => {
+                                       
                                         // if (checkedBoxRed)
-                                     {   setCheckedBox(!checkedBox);
-                                        setCheckedBoxRed(checkedBox)}
+                                        setCheckedBox(!checkedBox);
+                                        setCheckedBoxRed(checkedBox);
+                                        switch (checkedBox){
+                                            case false : handlegender("male");break;
+                                            case true : handlegender("female");break;
+    
+                                        }
                                     //     else                                        
                                     //      {setCheckedBox(checkedBox)
                                     //         setCheckedBoxRed(!checkedBoxRed)}
 
                                     // 
-                                    switch (checkedBox){
-                                        case false : handlegender("male");break;
-                                        case true : handlegender("female");break;
-
-                                    }
+                                   
                                 }
                                 }
                                 />
@@ -179,9 +212,13 @@ const InfoScreen= (params)=>{
                                     status={checkedBoxRed ? 'checked' : 'unchecked'}
                                     onPress={() => {
                                         // if(checkedBox)
-                                      {  setCheckedBoxRed(!checkedBoxRed);
+                                       setCheckedBoxRed(!checkedBoxRed);
                                         setCheckedBox(checkedBoxRed);
-                                    }
+                                        // switch (checkedBox){
+                                        //     case false : handlegender("male");break;
+                                        //     case true : handlegender("female");break;
+    
+                                        // }
 
                                         // else
                                         // {setCheckedBoxRed(checkedBoxRed)
@@ -230,7 +267,7 @@ const InfoScreen= (params)=>{
                 // secureTextEntry={data.secureTextEntry ? true : false}
                 style={styles.textInput}
                 autoCapitalize="none"
-                onChangeText={(val)=> handlePasswordChange(val)}
+                onChangeText={(val)=> handleLastName(val)}
                 />
                
                
@@ -244,7 +281,20 @@ const InfoScreen= (params)=>{
                         borderWidth:1 ,
                         marginTop: 1
                      }]}
-                        onPress={() => handleDataSet()}
+                        onPress={() => {
+                            // console.log(roomsDB,"roomsDBroomsDBroomsDBroomsDBroomsDBroomsDBroomsDBroomsDB")
+                            (dataIndexx+1 == stateindexData.nbAdult)?(
+                                        navigation.navigate('EVoucher')
+
+                                // console.log("last index ",dataIndexx,"stateindexData.nbAdult",stateindexData.nbAdult)
+                            ):(                                 console.log(" Not last index ",dataIndexx,"stateindexData.nbAdultttttttttttttttttttttttttttttttttttttt",stateindexData.nbAdult)
+                            )
+                            handleDataSet();
+                          
+                            handleAddInvitee ( data.email, data.firstName, data.lastName, data.gender,roomsDB.id) 
+                        SetHere(false);
+                        
+                        }}
                           >
                                 
                                 <Text style={styles.textSign,{
@@ -254,7 +304,21 @@ const InfoScreen= (params)=>{
                 </View>
 
         </Animatable.View>
-        </View>
+        <Modal
+        transparent={true}
+        visible={showLoader}
+        animationType='slide'
+
+      >
+        <Myloader 
+        
+        />
+
+      </Modal>
+        </View>): (
+            null
+
+        )
     )
 }
 export default InfoScreen;

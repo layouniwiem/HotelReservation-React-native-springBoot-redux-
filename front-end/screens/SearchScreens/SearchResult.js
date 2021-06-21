@@ -15,13 +15,14 @@ import {
   Image
 } from 'react-native';
 import { useDispatch } from 'react-redux'
-import{availableRoomsGetAll} from '../../actions/availableRoomsActions'
+import { availableRoomsGetAll } from '../../actions/availableRoomsActions'
 import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ScrollView } from 'react-native-gesture-handler';
 import Autocomplete from 'react-native-autocomplete-input';
 import { getCurrentHotel } from "../../actions/currentDataActions";
+import { hotelDBPostData } from "../../actions/reservationAction";
 const SearchResult = ({ route, navigation }) => {
   const dispatch = useDispatch();
 
@@ -32,17 +33,15 @@ const SearchResult = ({ route, navigation }) => {
   //   console.log("state hotels result")
   // }, [hotelstate]);
   useEffect(() => {
-    console.log("state hotels result", hotels.data)
-    console.log("state hotels result")
+    // console.log("state hotels result", hotels.data)
+    // console.log("state hotels result")
   }, [hotels.data]);
-  const [money, setMoney] = React.useState("TND")
-  
   const handleStars = (value) => {
     var stars = []
-    let val=handleStartsValue(value);
-    console.log(val)
+    let val = handleStartsValue(value);
+    // console.log(val)
 
-    
+
 
     for (let i = 1; i <= val; i++) {
       stars.push(<FontAwesome
@@ -57,30 +56,31 @@ const SearchResult = ({ route, navigation }) => {
     return stars
 
   }
-  const handleStartsValue=(value)=>{
+  const handleStartsValue = (value) => {
     switch (value) {
       case 'ONE_STAR':
         return 1;// code block
-        
-      case  'TWO_STAR':
+
+      case 'TWO_STAR':
         return 2;// code block
-        
+
       case 'THREE_STAR':
         return 3;// code block
-        
-      case  'FOUR_STAR':
-        return  4;// code block
-        
+
+      case 'FOUR_STAR':
+        return 4;// code block
+
       case 'FIVE_STAR':
         return 5;// code block
-      
+
       default:
         return;
-        
-    }  
+
+    }
   }
+
   const [films, setFilms] = useState([]);
-  const [filteredFilms, setFilteredFilms] = useState(hotels.data.hotelResultList.hotelResult);
+  const [filteredFilms, setFilteredFilms] = useState(hotels);
   const [selectedValue, setSelectedValue] = useState({});
   const findFilm = (query) => {
     //method called everytime when we change the value of the input
@@ -95,6 +95,30 @@ const SearchResult = ({ route, navigation }) => {
       setFilteredFilms([]);
     }
   };
+  const handleAddHotelDB = (hotelCode, hotelName, prixTotal, adress, rating, image) => {
+
+
+    try {
+
+      console.log("hello handleAddHotelDB ", hotelCode, hotelName, prixTotal, adress, rating, image);
+
+      dispatch(hotelDBPostData({
+        'hotelCode': hotelCode,
+
+        'hotelName': hotelName,
+        'prixTotal': prixTotal,
+        "adress": adress,
+        "rating": rating,
+        "image": image
+      })).then((res) => {
+        setShowLoader(false)
+        // /  console.log("res handleAddHotelDB",res)
+      })
+      setShowLoader(true)
+    } catch (e) {
+      console.log("error", e);
+    }
+  }
   React.useEffect(() => {
     // fetch('https://aboutreact.herokuapp.com/getpost.php?offset=1')
     //   .then((res) => res.json())
@@ -103,11 +127,11 @@ const SearchResult = ({ route, navigation }) => {
     const { res } = [];
     //console.log("hotzl",hotels[0])
 
-   ( hotels.data !== null )? (
+    (hotels.data !== null && hotels.data.hotelResultList !== null && hotels.data.hotelResultList.hotelResult) ? (
       setFilms(hotels.data.hotelResultList.hotelResult)
-    ):(  console.log("no data found"))
-    
-    console.log(films)
+    ) : (console.log("no data found"))
+
+    // console.log(films)
     //setting the data in the films state
     // })
     // .catch((e) => {
@@ -116,44 +140,39 @@ const SearchResult = ({ route, navigation }) => {
     // console.log(films)
   }, [hotels.data]);
   return (
-     ( hotels.data.hotelResultList == null  ||  hotels.data == null ||  hotels.data.hotelResultList.hotelResult == null ) ? (
-      
+    (hotels.data !== null && hotels.data.hotelResultList !== null && hotels.data.hotelResultList.hotelResult) ? (
+
+      (
         <View  >
-          <Text> no data found</Text>
-    </View>
-    
-    
-      ):(
-    <View  >
-      <SafeAreaView>
-        <View  >
-          <View style={styles.action}>
-            <Autocomplete
-              autoCapitalize="none"
-              autoCorrect={false}
-              containerStyle={styles.autocompleteContainer}
-              //data to show in suggestion
-             // data={filteredFilms}
-              //default value if you want to set something in input
-              defaultValue={
-                JSON.stringify(selectedValue) === '{}' ? '' : selectedValue.title}
-              /*onchange of the text changing the state of the query which will trigger
-              the findFilm method to show the suggestions*/
-              onChangeText={(text) => findFilm(text)}
-              placeholder="Enter the hotel name"
-              renderItem={({ item }) => (
-                //you can change the view you want to show in suggestion from here
-                <TouchableOpacity
-                  onPress={() => {
-                    setSelectedValue(item);
-                    setFilteredFilms([]);
-                  }}>
-                  <Text style={styles.itemText}>{item.name}</Text>
-                </TouchableOpacity>
-              )}
-            />
-          </View>
-          {/* <View style={styles.descriptionContainer}>
+          <SafeAreaView>
+            <View  >
+              <View style={styles.action}>
+                <Autocomplete
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  containerStyle={styles.autocompleteContainer}
+                  //data to show in suggestion
+                  // data={filteredFilms}
+                  //default value if you want to set something in input
+                  defaultValue={
+                    JSON.stringify(selectedValue) === '{}' ? '' : selectedValue.title}
+                  /*onchange of the text changing the state of the query which will trigger
+                  the findFilm method to show the suggestions*/
+                  onChangeText={(text) => findFilm(text)}
+                  placeholder="Enter the hotel name"
+                  renderItem={({ item }) => (
+                    //you can change the view you want to show in suggestion from here
+                    <TouchableOpacity
+                      onPress={() => {
+                        setSelectedValue(item);
+                        setFilteredFilms([]);
+                      }}>
+                      <Text style={styles.itemText}>{item.name}</Text>
+                    </TouchableOpacity>
+                  )}
+                />
+              </View>
+              {/* <View style={styles.descriptionContainer}>
           {films.length > 0 ? (
             <>
               <Text style={styles.infoText}>Selected Data</Text>
@@ -165,59 +184,66 @@ const SearchResult = ({ route, navigation }) => {
             <Text style={styles.infoText}>Enter The Film Title</Text>
           )}
         </View> */}
-        </View>
-      </SafeAreaView>
-      <View style={{margin:2}}>
-
-      
-     
-      <FlatList
-        data={filteredFilms}
-        keyExtractor={(item, index) => item.hotelInfo.hotelCode}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('ResultDetail', { item })
-              dispatch(getCurrentHotel(item)) 
-
-            }}
-          >
-            <View style={styles.container}>
-              {/* <Text>SearchResult</Text> */}
-              <View style={styles.item2}>
+            </View>
+          </SafeAreaView>
+          <View style={{ margin: 2 }}>
 
 
-                <Card >
-                  <Card.Content>
-                  <Text style={styles.signIn}>{item.hotelInfo.hotelName}</Text>
-                    <Paragraph>{item.hotelInfo.hotelAdress}</Paragraph>
-                  </Card.Content>
-                  <Card.Cover source={{ uri: item.hotelInfo.hotelPicture }} />
-                  {/* <Card.Cover source={{uri:item.coverImages}} />  */}
-                  {/* <Card.Cover source={require(item.coverImages)} /> */}
+
+            <FlatList
+              data={filteredFilms.data.hotelResultList.hotelResult}
+              keyExtractor={(item, index) => item.hotelInfo.hotelCode}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  onPress={() => {
+                    console.log("pressed handleAddHotelDB")
+                    handleAddHotelDB(item.hotelInfo.hotelCode,
+                      item.hotelInfo.hotelName, item.minHotelPrice.totalPrice, item.hotelInfo.hotelAddress, item.hotelInfo.rating, item.hotelInfo.hotelPicture)
+                      // handleAddHotelDB(item.hotelInfo.hotelCode,
+                      //   item.hotelInfo.hotelName, item.minHotelPrice.totalPrice, item.hotelInfo.hotelAddress, item.hotelInfo.rating, item.hotelInfo.hotelPicture)
+  
+                    navigation.navigate('ResultDetail', { item })
+                    dispatch(getCurrentHotel(item));
+                  
+
+                  }}
+                >
+                  <View style={styles.container}>
+                    {/* <Text>SearchResult</Text> */}
+                    <View style={styles.item2}>
 
 
-                </Card>
-              </View>
+                      <Card >
+                        <Card.Content>
+                          <Text style={styles.signIn}>{item.hotelInfo.hotelName}</Text>
+                          <Paragraph>{item.hotelInfo.hotelAdress}</Paragraph>
+                        </Card.Content>
+                        <Card.Cover source={{ uri: item.hotelInfo.hotelPicture }} />
+                        {/* <Card.Cover source={{uri:item.coverImages}} />  */}
+                        {/* <Card.Cover source={require(item.coverImages)} /> */}
 
-              <View style={styles.item2}>
-                <View style={styles.action2}>
-                  <View>
-                    <Text> {handleStars(item.hotelInfo.rating)}</Text>
-                  </View>
 
-                </View >
+                      </Card>
+                    </View>
 
-                <View style={styles.action2}>
-                  <FontAwesome
-                    name="map-marker"
-                    color="#05375a"
-                    size={20}
-                    marginRight={10}
-                  />
-                  <Text style={styles.text}> {item.hotelInfo.hotelAddress} </Text>
-                </View>
-                {/* <View style={styles.action2}>
+                    <View style={styles.item2}>
+                      <View style={styles.action2}>
+                        <View>
+                          <Text> {handleStars(item.hotelInfo.rating)}</Text>
+                        </View>
+
+                      </View >
+
+                      <View style={styles.action2}>
+                        <FontAwesome
+                          name="map-marker"
+                          color="#05375a"
+                          size={20}
+                          marginRight={10}
+                        />
+                        <Text style={styles.text}> {item.hotelInfo.hotelAddress} </Text>
+                      </View>
+                      {/* <View style={styles.action2}>
               <FontAwesome
                 name="stack-exchange"
                 color="#05375a"
@@ -227,30 +253,37 @@ const SearchResult = ({ route, navigation }) => {
               <Text style={styles.text}> {item.comments} </Text>
               
               </View> */}
-                <ScrollView style={styles.scrollView, { height: '10%', margin: 5 }}>
-                  <Text style={styles.textView}>
-                    {item.hotelInfo.hotelDescription}
-                  </Text>
+                      <ScrollView style={styles.scrollView, { height: '10%', margin: 5 }}>
+                        <Text style={styles.textView}>
+                          {item.hotelInfo.hotelDescription}
+                        </Text>
 
-                </ScrollView>
+                      </ScrollView>
 
-                <View style={styles.button} >
-
-
-
-                  <Text style={styles.signIn}
-                  > {item.minHotelPrice.currency}: {item.minHotelPrice.totalPrice} </Text>
+                      <View style={styles.button} >
 
 
-                </View>
-              </View>
 
-            </View>
-          </TouchableOpacity>)}
-      />
-</View>
-    </View>
-  ))
+                        <Text style={styles.signIn}
+                        > {item.minHotelPrice.currency}: {item.minHotelPrice.totalPrice} </Text>
+
+
+                      </View>
+                    </View>
+
+                  </View>
+                </TouchableOpacity>)}
+            />
+          </View>
+        </View>
+      )) : (<View  >
+        <View style={styles.action2}> 
+        <Text style={styles.textfilter}> no Hotel data found Try Again Later ... </Text>
+        </View>
+        </View>
+
+
+    ))
 };
 
 
@@ -344,21 +377,21 @@ const styles = StyleSheet.create({
 
     justifyContent: 'center',
     alignItems: 'center',
-   // borderRadius: 10,
+    // borderRadius: 10,
     fontWeight: 'bold',
     fontSize: 20,
     color: '#002E63',
-      shadowColor: "#000",
-      shadowOffset: {
-        width: 1,
-        height: 1,
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 3.84,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 1,
+      height: 1,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
 
-      elevation: 0.5,
-     flexDirection: 'row',
-     // backgroundColor: '#C0C0C0'
+    elevation: 0.5,
+    flexDirection: 'row',
+    // backgroundColor: '#C0C0C0'
   },
   plus: {
     width: '100%',

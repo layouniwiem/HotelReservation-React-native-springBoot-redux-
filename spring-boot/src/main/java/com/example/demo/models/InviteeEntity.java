@@ -1,5 +1,6 @@
 package com.example.demo.models;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 import javax.persistence.Column;
@@ -12,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "invitees")
-public class InviteeEntity {
+public class InviteeEntity implements Serializable {
 	@Id
 	@Column(name = "ID", unique = true, nullable = false, precision = 22, scale = 0)
 	private BigDecimal id;
@@ -24,8 +25,10 @@ public class InviteeEntity {
 	private String lastName;
 	@Column(name = "gender")
 	private String gender;
-	@Column(name = "id_Room")
+	
+	@Column(name = "id_Room",nullable = false)
 	private long id_Room;
+//	@Column(name = "ID", unique = true, nullable = false, precision = 22, scale = 0)
 
 	public BigDecimal getId() {
 		return id;
@@ -64,14 +67,17 @@ public class InviteeEntity {
 	public void setId_Room(long id_Room) {
 		this.id_Room = id_Room;
 	}
-	public InviteeEntity(BigDecimal id, String email, String firstName, String lastName, String gender , long id_Room) {
+	public InviteeEntity( String email, String firstName, String lastName, String gender , long id_Room) {
 		super();
-		this.id = id;
+		
 		this.email = email;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.gender = gender;
 		this.id_Room= id_Room;
+	}
+	public InviteeEntity() {
+		// TODO Auto-generated constructor stub
 	}
 	@Override
 	public String toString() {

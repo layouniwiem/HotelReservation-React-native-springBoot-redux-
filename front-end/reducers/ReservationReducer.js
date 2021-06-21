@@ -3,6 +3,7 @@ const initialState = {
     data: null,
     ReservationErr: "",
     loading: true,
+    AllReservations:null,
   };
 
   const ReservationReducer = (state = initialState, action) => {

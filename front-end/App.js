@@ -42,7 +42,7 @@ const dispatch = useDispatch();
      const token = await AsyncStorage.getItem('userToken');
    
 
-     console.log(token)
+    //  console.log(token)
      if(token){
          setLogged(true)
      }else{
@@ -82,18 +82,18 @@ const dispatch = useDispatch();
   
  useEffect(()=>{
     detectLogin()
- },[])
+ })
  useEffect(()=>{
   getCities();
 })
  const state = useSelector(state => state.users)
- console.log("state.userToken ",state.userToken)
+//  console.log("state.userToken ",state.userToken)
 
 return(
   <NavigationContainer>
 
   {
-  // (state.userToken !== null ||isloggedin==true ) ? (  
+  (state.userToken !== null ||isloggedin==true ) ? (  
 
    <Drawer.Navigator drawerContent={props =>
      <DrawerContent  {...props} />
@@ -103,9 +103,9 @@ return(
      <Drawer.Screen name="BookmarkScreen" component={BookmarkScreen} />
      <Drawer.Screen name="SettingsScreen" component={SettingsScreen} />
    </Drawer.Navigator>
-  //  ) 
-    // : 
-  //  <RootStackScreen />  
+   ) 
+    : 
+   <RootStackScreen />  
 
    }  
 </NavigationContainer>

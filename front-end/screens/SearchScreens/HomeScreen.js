@@ -23,6 +23,7 @@ import { hotelsGetAll } from '../../actions/hotelsActions';
 import { useDispatch } from 'react-redux'
 import Myloader from '../Myloader';
 import CityScreen from './SearchRoom/Cityscreen';
+import { indexGetnbRooms } from '../../actions/indexAction';
 const HomeScreen = ({ route, navigation }) => {
   const [ratingValue, SetRatingValue] = useState(0);
   const [isshowRatingModal, setIsShowRatingModal] = React.useState(false);
@@ -62,7 +63,8 @@ date= moment(new Date()).format("YYYY-MM-DD");
   const [isRoomModalVisible, setIsRoomModalVisible] = useState(false);
   const [isCountriesmodalVisible, setCountriesmodalVisible] = useState(false);
   const [isCitiesmodalVisible, setCitiesmodalVisible] = useState(false);
-
+const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
   const [isSelectedItem, setSelectedItem] = useState(null);
   const [count, setCount] = useState(0);
   const [nationality, SetNationality] = useState("TN")
@@ -73,14 +75,59 @@ date= moment(new Date()).format("YYYY-MM-DD");
   const state = useSelector(state => state.indexData)
   const statehotel = useSelector(state => state.hotels)
   const stateCities = useSelector(state => state.cities)
-
-  const handleSearch = (date_CheckIN, date_CheckOut, roomsValue, ratingValue, nationality,nbAdult,nbChildren,nbInfant,childrenAgeList,codeCityTBO) => {
+  const handleSearch2 = (date_CheckIN, date_CheckOut, roomsValue, ratingValue, nationality,nbAdult,nbChildren,nbInfant,childrenAgeList,codeCityTBO,rooms) => {
     if (ratingValue=="All")
       SetRatingValue(0);
     
     try {
       
-      console.log("hello fromhandle search",date_CheckIN, date_CheckOut, roomsValue, ratingValue, nationality,nbAdult,nbChildren,nbInfant,childrenAgeList,codeCityTBO );
+      console.log("hello fromhandle search",date_CheckIN, date_CheckOut, roomsValue, ratingValue, nationality,nbAdult,nbChildren,nbInfant,childrenAgeList,codeCityTBO ,rooms );
+      dispatch(indexGetnbRooms(roomsValue))
+
+      
+      dispatch(hotelsGetAll({
+        'checkIn': date_CheckIN,
+        'checkOut': date_CheckOut,
+        // 'codeCityTBO': "130452",
+
+         'codeCityTBO': "141525",
+        "nbRooms":roomsValue,
+        "ratings":ratingValue,
+        "nationality":"TN",
+      
+        "rooms":[ 
+          {
+              "nbAdult": nbAdult,
+              "nbChildren": nbChildren,
+              "nbInfant": nbInfant,
+              "childrenAgeList":childrenAgeList
+          },
+          
+      ]
+      }     
+      )
+
+      ).then((res) => {
+        setShowLoader(false) 
+        // console.log("res",res)
+        // console.log(rooms)
+        navigation.navigate('SearchResult')
+
+
+      })
+      setShowLoader(true)    } catch (e) {
+      console.log("error",e);
+    }
+  }
+  const handleSearch = (date_CheckIN, date_CheckOut, roomsValue, ratingValue, nationality,nbAdult,nbChildren,nbInfant,childrenAgeList,codeCityTBO,rooms) => {
+    if (ratingValue=="All")
+      SetRatingValue(0);
+    
+    try {
+      
+      console.log("hello fromhandle search",date_CheckIN, date_CheckOut, roomsValue, ratingValue, nationality,nbAdult,nbChildren,nbInfant,childrenAgeList,codeCityTBO ,rooms );
+      dispatch(indexGetnbRooms(roomsValue))
+
       
       dispatch(hotelsGetAll({
         'checkIn': date_CheckIN,
@@ -106,8 +153,8 @@ date= moment(new Date()).format("YYYY-MM-DD");
 
       ).then((res) => {
         setShowLoader(false) 
-        console.log("res",res)
-        console.log(rooms)
+        // console.log("res",res)
+        // console.log(rooms)
         navigation.navigate('SearchResult')
 
 
@@ -124,7 +171,7 @@ date= moment(new Date()).format("YYYY-MM-DD");
   };
   const handleSelectedItem = (item) => {
     setSelectedItem(item.name);
-    console.log("item",item)
+    // console.log("item",item)
   }
   const showCountriesPicker = () => {
     setCountriesmodalVisible(true);
@@ -156,7 +203,7 @@ date= moment(new Date()).format("YYYY-MM-DD");
     hideDatePicker();
   };
 
-console.log(state.countryCode.cityCode,"state.countryCode.cityCode")
+// console.log(state.countryCode.cityCode,"state.countryCode.cityCode")
 
   const [dataSource, setDataSource] = React.useState([
     { name: 'Tunisie', key: "0" }, { name: 'France', key: "1" }, { name: 'Italie', key: "2" }
@@ -173,16 +220,16 @@ console.log(state.countryCode.cityCode,"state.countryCode.cityCode")
           <TouchableOpacity
             style={styles.placeTonight}
             onPress={() => {
-              handleSearch (date_CheckIN, 
+              handleSearch2 (date_CheckIN, 
                 date_CheckOut,
                  roomsValue, 
                  ratingValue,
-                 nationality,
+                 "141525",
                  state.nbAdult,
                  state.nbChildren
                  ,state.nbInfant
-                 ,ageList,
-                 state.countryCode.cityCode) 
+                 ,ageList,"TN",
+                 ) 
             }}
           >
 
@@ -396,6 +443,7 @@ console.log(state.countryCode.cityCode,"state.countryCode.cityCode")
         transparent={true}
         visible={isCitiesmodalVisible}
         animationType='slide'
+        
 
       >
         <CityScreen

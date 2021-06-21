@@ -8,9 +8,10 @@ import {
   Dimensions,
   Platform,
   StyleSheet,
-  TouchableOpacity,
+
 
 } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import{availableRoomsGetAll} from '../../actions/availableRoomsActions'
 
 import { Avatar, Button, Card, Title, Paragraph, Modal } from 'react-native-paper';
@@ -26,11 +27,11 @@ import Myloader from '../Myloader';
 const ResultDetail = ({ route, navigation }) => {
   const dispatch = useDispatch();
 
-  const [money, setMoney] = React.useState("TND")
   const hotels = useSelector(state => state.hotels.data);
   const[showLoader,setShowLoader]= React.useState(false);
 
   const { item } = route.params;
+  
   const handleSearchRoomAvailability = (resultIndex, sessionId, hotelCode, responseTime) => {
  
     
@@ -46,7 +47,7 @@ const ResultDetail = ({ route, navigation }) => {
       })).then((res) => {
         setShowLoader(false) 
 
-        console.log("res",res)
+         console.log("res",res)
         navigation.navigate('SearchRoom')
         //navigation.navigate('ResultDetail', { res })
 
@@ -60,7 +61,7 @@ const ResultDetail = ({ route, navigation }) => {
   const handleStars = (value) => {
     var stars = []
     let val=handleStartsValue(value);
-    console.log(val)
+    // console.log(val)
 
     
 
@@ -128,14 +129,14 @@ const ResultDetail = ({ route, navigation }) => {
             </Card>
           </View>
           <View style={styles.containerShadow}>
-            {/* <MyCarousel data={item.hotelInfo.hotelPicture} /> */}
+            {/* <MyCarousel data={itemadd} /> */}
             <Card >
                   {/* <Card.Content>
                   <Text style={styles.signIn}>{item.hotelInfo.hotelName}</Text>
                     <Paragraph>{item.hotelInfo.hotelAdress}</Paragraph>
                   </Card.Content> */}
-                  <Card.Cover source={{ uri: item.hotelInfo.hotelPicture }} />
-                  {/* <Card.Cover source={{uri:item.coverImages}} />  */}
+                  <Card.Cover source={{ uri: item.hotelInfo.hotelPicture }} />             
+                       {/* <Card.Cover source={{uri:item.coverImages}} />  */}
                   {/* <Card.Cover source={require(item.coverImages)} /> */}
 
 

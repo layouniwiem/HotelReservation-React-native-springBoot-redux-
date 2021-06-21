@@ -39,7 +39,7 @@ const SplashScreen = ({ navigation }) => {
                 style={styles.footer}
                 animation='fadeInLeftBig'
             >
-                <Text style={styles.title}>Stay Connected       With EveryOne </Text>
+                <Text style={styles.title}>Stay Connected...      </Text>
                 <Text style={styles.text}> Sign in with account </Text>
                 <View style={styles.button}>
                     <TouchableOpacity onPress={() => navigation.navigate('SignInScreen')}>

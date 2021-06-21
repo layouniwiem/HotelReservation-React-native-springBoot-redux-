@@ -19,6 +19,7 @@ import { useDispatch } from 'react-redux'
 import { indexCountry, indexGetCountry } from '../../actions/indexAction';
 import { citiesDestGetAll } from '../../actions/cityAction';
  import Myloader from '../Myloader';
+ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 
 
@@ -145,7 +146,17 @@ const CountryScreen = params => {
               setShowModal(false)
             }}>
               <View style={styles.action}>
+              <FontAwesome
+            name="map-marker"
+            color="#05375a"
+            size={18}
+            //  marginTop={20}
+
+            marginRight={10}
+
+          />
             <Text style={styles.text}>
+              
                 {item.countryName}
             </Text>
             </View>
@@ -197,9 +208,14 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    color: 'grey',
-    marginTop: 5,
+    color: '#05375a',
+    // marginTop:10,
     paddingLeft: 20,
+    fontSize: 16,
+    fontWeight: 'bold',
+    fontStyle: "italic"
+
+
 
   },
   textSign: {
@@ -251,7 +267,7 @@ const styles = StyleSheet.create({
   action: {
     flexDirection: 'row',
     margin: 2,
-    marginTop: 2,
+    marginTop: 10,
 
     // borderBottomWidth: 1,
     // borderBottomColor: '#C0C0C0',

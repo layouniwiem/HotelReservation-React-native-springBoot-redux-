@@ -192,7 +192,8 @@ const SignUpScreen= ({navigation})=>{
                 <View style={styles.button } >
                 <TouchableOpacity
               onPress={(user)=>
-                {handleaddUser(user)
+                {
+                    handleaddUser(user)
                     handleaddUser(user)
                     navigation.goBack()}
             }

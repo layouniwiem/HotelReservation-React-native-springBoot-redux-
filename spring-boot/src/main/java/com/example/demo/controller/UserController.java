@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.models.User;
 //import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
-
 @RestController
 @RequestMapping("/api/users")
 public class UserController {

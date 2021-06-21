@@ -16,6 +16,9 @@ import { useState } from 'react';
 import { SafeAreaView } from 'react-native';
 import { useDispatch } from 'react-redux'
 import { indexGetCountry } from '../../../actions/indexAction';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 const CityScreen = params => {
   const dispatch = useDispatch();
 
@@ -126,6 +129,12 @@ const CityScreen = params => {
               setShowModal(false)
             }}>
               <View style={styles.action}>
+              <MaterialCommunityIcons
+            name="city-variant-outline"
+            color="#05375a"
+            size={18}
+            // marginRight={10}
+          />
             <Text style={styles.text}>
                 {item.cityName}
             </Text>
@@ -156,10 +165,10 @@ const styles = StyleSheet.create({
   modalView: {
 
 
-    marginTop: '50%',
+    marginTop: '20%',
     backgroundColor: "white",
     borderRadius: 20,
-    padding: 35,
+    // padding: 35,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
@@ -173,9 +182,14 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    color: 'grey',
-    marginTop: 5,
+    color: '#05375a',
+    //  marginTop:2,
     paddingLeft: 20,
+    fontSize: 16,
+    fontWeight: 'bold',
+    fontStyle: "italic"
+
+
 
   },
   textSign: {
@@ -227,11 +241,11 @@ const styles = StyleSheet.create({
   action: {
     flexDirection: 'row',
     margin: 2,
-    marginTop: 2,
-
-    // borderBottomWidth: 1,
-    // borderBottomColor: '#C0C0C0',
-    // paddingBottom: 5,
+    marginTop: 10,
+    //  width:'100%',
+    //  borderBottomWidth: 1,
+    // borderBottomColor: '#30D5C8',
+    //  paddingBottom: 10,
     // height: 50
   },
 

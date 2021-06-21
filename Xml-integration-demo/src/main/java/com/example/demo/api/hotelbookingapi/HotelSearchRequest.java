@@ -128,7 +128,7 @@ public class HotelSearchRequest {
     		this.guestNationality = requestHotel.getNationality();
     		this.filters = new Filters(requestHotel);
     		this.resultCount = 0;
-    		this.responseTime = 21;
+    		this.responseTime = 15;
     		this.roomGuests = new ArrayOfRoomGuest(requestHotel);
     	} catch (Exception e) {
     		// TODO Auto-generated catch block

@@ -1,18 +1,25 @@
 import axios from 'axios';
-// const USER_API_BASE_URL = 'http://192.168.1.192:8001';
 import *  as config from '../config/strings.json'
-const USER_API_BASE_URL =config.link+ '8001/api';
+const USER_API_BASE_URL =  config.link+'8098';
 
-export const authsService = (url, method, body = {}) => {
-  console.log('AuthService',url)
-  const headers = {
-    'Content-Type': 'application/json'
+
+export const authsService = (url, method, body,token = "") => {
+  console.log('AuthService',USER_API_BASE_URL+ `/${url}`)
+  console.log('body',body)
+  let config = {
+    headers: {
+     'Content-Type':'application/json',
+    }
   }
   return axios({
     method,
-    url: USER_API_BASE_URL +`/${url}`,
-    data: body,
-    //headers: headers
+    // url:USER_API_BASE_URL + `/${url}`,
+    url:USER_API_BASE_URL+ `/${url}`,
+    data: {
+      username: 'user1',
+      password: '0000'
+    },
+    config
   });
 }
 

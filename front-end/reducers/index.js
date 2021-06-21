@@ -3,17 +3,17 @@ const initialState = {
     nbAdult:1,
     nbChildren:0,
     nbInfant:0,
-    childrenAgeList:[],
+    childrenAgeList:null,
     countryCode:"",
     Country:"",
-    
+    nbRooms:"",
     indexErr: "",
     loading: false,
     rooms: [{
       nbAdult:1,
       nbChildren:0,
       nbInfant:0,
-      childrenAgeList:[]
+      childrenAgeList:null
   }],
   };
 
@@ -93,6 +93,13 @@ const reducer = (state = initialState, action) => {
                           indexErr: "",
                           loading: false
                       }
+                      case actions.INDEX_GET_NBROOMS:
+                        return{
+                          ...state,
+                            nbRooms:action.payload,
+                            indexErr: "",
+                            loading: false
+                        }
               default:
                 return state;
             

@@ -1,19 +1,37 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import *  as config from '../config/strings.json'
+const USER_API_BASE_URL = config.link+'8098/api';
 
-const USER_API_BASE_URL = config.link+'8001/api';
+export const reservationService = (url, method, body ={},token ) => {
+  
+	const cookie =  AsyncStorage.getItem('userToken')
+  const composeToken = (token) =>
+   {
+     console.log(token,"token from service") ;
+     token ? { Authorization: token } : {}; 
+    }
 
-
-
-export const reservationService = (url, method, body = {},token = "") => {
-  console.log('reservationService',url)
+  const headers = {
+    'Content-Type': 'application/json'
+  }
+  console.log("url,",USER_API_BASE_URL + `/reserver${url}`)
   return axios({
     method,
-    url: USER_API_BASE_URL + `/reservation${url}`,
+    url: USER_API_BASE_URL + `/reserver${url}`,
     data: body,
-    headers: {
-    //   ...composeToken(token),
+    headers: 
+    {
+        Authorization: token 
+       
     },
   });
 }
 
+
+const getAuthorizationHeader = (token) => {
+  const FBIdToken =
+  AsyncStorage.getItem('userToken');
+   //axios.defaults.headers.common['Authorization'] = FBIdToken;
+   return FBIdToken
+}

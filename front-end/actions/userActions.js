@@ -86,6 +86,7 @@ export const userUpdatedData = (user) => async (dispatch) => {
     try {
       dispatch({ type: actions.USER_LOADING });
       const res = await authsService("authenticate", "post", user);
+      console.log("out",res)
       setAuthorizationHeader(res.data.jwt)
       console.log("res",res.data.jwt)
       dispatch({ type: actions.LOGIN_SUCCESS, payload: res.data });

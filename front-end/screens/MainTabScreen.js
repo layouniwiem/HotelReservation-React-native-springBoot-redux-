@@ -4,7 +4,7 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import { createStackNavigator } from '@react-navigation/stack';
 
 import Icon from 'react-native-vector-icons/Ionicons';
-
+import HistoriqueDetails from './SearchScreens/SearchRoom/HistoriqueDetails'
 import HomeScreen from './SearchScreens/HomeScreen';
 import DetailsScreen from './DetailsScreen';
 import ExploreScreen from './ExploreScreen';
@@ -15,6 +15,8 @@ import SearchRoom from './SearchScreens/SearchRoom/SearchRoom'
 import RoomDetail from './SearchScreens/SearchRoom/RoomDetail';
 import BookScreen from './SearchScreens/BookScreens/BookScreen';
 import EVoucherScreen from './SearchScreens/BookScreens/EVoucherScreen';
+import HistoryVoucher from './SearchScreens/BookScreens/HistoryVoucher';
+import CardScreen from './SearchScreens/BookScreens/CardScreen'
 const HomeStack = createStackNavigator();
 const DetailsStack = createStackNavigator();
 
@@ -40,10 +42,10 @@ const MainTabScreen = () => (
         name="Notifications"
         component={DetailsStackScreen}
         options={{
-          tabBarLabel: 'Updates',
-          tabBarColor: '#1f65ff',
+          tabBarLabel: 'History',
+          tabBarColor: '#5D8AA8',
           tabBarIcon: ({ color }) => (
-            <Icon name="ios-notifications" color={color} size={26} />
+            <Icon name="bookmarks-sharp" color={color} size={26} />
           ),
         }}
       />
@@ -85,7 +87,7 @@ const HomeStackScreen = ({navigation}) => (
         }
     }}>
         <HomeStack.Screen name="Home" component={HomeScreen} options={{
-        title:' Search Hotel',
+        title:' Search for Hotel',
    
         headerLeft: () => (
             <Icon.Button name="ios-menu"
@@ -97,7 +99,7 @@ const HomeStackScreen = ({navigation}) => (
         }} />
         <HomeStack.Screen name="ResultDetail" component={ResultDetail}
          options={{
-        title:'Result Search ',
+        title:'Details ',
    
         headerLeft: () => (
             <Icon.Button name="ios-menu"
@@ -110,7 +112,7 @@ const HomeStackScreen = ({navigation}) => (
         />
         <HomeStack.Screen name="SearchResult" component={SearchResult}
          options={{
-        title:'Result Search ',
+        title:'Result of Search ',
    
         headerLeft: () => (
             <Icon.Button name="ios-menu"
@@ -123,7 +125,7 @@ const HomeStackScreen = ({navigation}) => (
         />
           <HomeStack.Screen name="SearchRoom" component={SearchRoom}
          options={{
-        title:' SearchRoom ',
+        title:' Searching for Rooms  ',
    
         headerLeft: () => (
             <Icon.Button name="ios-menu"
@@ -136,7 +138,7 @@ const HomeStackScreen = ({navigation}) => (
         />
         <HomeStack.Screen name="RoomDetail" component={RoomDetail}
          options={{
-        title:' RoomDetail ',
+        title:' Room Detail ',
    
         headerLeft: () => (
             <Icon.Button name="ios-menu"
@@ -149,7 +151,7 @@ const HomeStackScreen = ({navigation}) => (
         />
            <HomeStack.Screen name="BookScreen" component={BookScreen}
          options={{
-        title:' BookScreen ',
+        title:' Booking  ',
    
         headerLeft: () => (
             <Icon.Button name="ios-menu"
@@ -173,13 +175,26 @@ const HomeStackScreen = ({navigation}) => (
         )
         }} 
         />
+           <HomeStack.Screen name="CardScreen" component={CardScreen}
+         options={{
+        title:' Enter your Card Informations ',
+   
+        headerLeft: () => (
+            <Icon.Button name="ios-menu"
+             size={25} 
+             backgroundColor="#002E63"
+              onPress={() => navigation.openDrawer()
+              }></Icon.Button>
+        )
+        }} 
+        />
 </HomeStack.Navigator>
 );
 
 const DetailsStackScreen = ({navigation}) => (
 <DetailsStack.Navigator screenOptions={{
         headerStyle: {
-        backgroundColor: '#1f65ff',
+        backgroundColor: '#5D8AA8',
         },
         headerTintColor: '#fff',
         headerTitleStyle: {
@@ -187,13 +202,39 @@ const DetailsStackScreen = ({navigation}) => (
         }
     }}>
         <DetailsStack.Screen name="Details" component={DetailsScreen} options={{
+                  title:'Reservations History ',
+
         headerLeft: () => (
-            <Icon.Button name="ios-menu" size={25} backgroundColor="#1f65ff" 
+            <Icon.Button name="ios-menu" size={25} backgroundColor="#5D8AA8" 
             onPress={() =>
                navigation.openDrawer()}>
                  
                </Icon.Button>
         )
         }} />
+        <DetailsStack.Screen name="HistoriqueDetails" component={HistoriqueDetails} options={{
+                  title:' Details of Your Reservation ',
+
+        headerLeft: () => (
+            <Icon.Button name="ios-menu" size={25} backgroundColor="#5D8AA8" 
+            onPress={() =>
+               navigation.openDrawer()}>
+                 
+               </Icon.Button>
+        )
+        }} />
+        <DetailsStack.Screen name="EVoucherHistory" component={HistoryVoucher}
+         options={{
+        title:' E-Voucher ',
+   
+        headerLeft: () => (
+            <Icon.Button name="ios-menu"
+             size={25} 
+             backgroundColor="#5D8AA8"
+              onPress={() => navigation.openDrawer()
+              }></Icon.Button>
+        )
+        }} 
+        />
 </DetailsStack.Navigator>
 );

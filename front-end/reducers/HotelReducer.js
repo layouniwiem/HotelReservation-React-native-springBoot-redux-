@@ -1,6 +1,6 @@
 import * as actions from "../actions/userTypes"
 const initialState = {
-    data: null,
+    data: null ,
     hotelErr: "",
     loading: true,
   };
